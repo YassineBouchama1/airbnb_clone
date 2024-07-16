@@ -1,50 +1,68 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../AuthContext';
 import { useRouter } from 'expo-router';
+import useFetch from '@/hooks/useFetch';
+const API_URL = 'http://192.168.1.5:3000'; // Your server IP
+
+
+interface LoginResponse {
+    access_token: string;
+    refresh_token: string;
+    userId: number ;
+  }
+  
+  interface LoginData {
+    email: string;
+    password: string;
+  }
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("pm@yassine.info");
+    const [password, setPassword] = useState("pass123");
+    const { fetchData, loading, error } = useFetch<LoginResponse>();
 
 const router = useRouter()
     const { checkAuthStatus } = useAuth();
 
+   
     const handleLogin = async () => {
+
+
         try {
-            const response = await fetch('http://localhost:3000/auth/signup', {
+            // const loginData: any = { email, password };
+            const result = await fetch('http://192.168.1.5:3000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    email, 
-                    password,
-                }),
+                body: JSON.stringify({ email, password }),
             });
-
-            const loginResponse = await response.json();
-            console.log('Login response:', loginResponse);
-
-            if (response.ok) {
-                await AsyncStorage.setItem('access_token', loginResponse.access_token);
-                await AsyncStorage.setItem('refresh_token', loginResponse.refresh_token);
-                await AsyncStorage.setItem('user_code', loginResponse.user.user_code);
+    
+            const rspo = await result.json()
+            console.log(rspo)
+            
+            // save inof in local storage
+                await AsyncStorage.setItem('access_token', rspo.access_token);
+                await AsyncStorage.setItem('refresh_token', rspo.refresh_token);
+                await AsyncStorage.setItem('user_code', String(rspo.userId));
 
                 await checkAuthStatus();
+            // Here you would typically store the tokens securely
+            // and navigate to the next screen
+          } catch (err) {
 
-                Alert.alert('Login Successful', 'You have successfully logged in.');
-                router.push('index');
-            } else {
-                Alert.alert('Login Failed', loginResponse.message || 'Please try again.');
-            }
-        } catch (error) {
-            console.error('Error during login:', error);
-            Alert.alert('Error', 'An error occurred. Please try again.');
-        }
+            Alert.alert('Login Failed', 'Please check your credentials and try again.');
+            console.error('Login failed', err);
+          }
+
+         
+
+
+  
     };
 
     return (
@@ -57,6 +75,7 @@ const router = useRouter()
                 isLooping
                 isMuted
             />
+            {loading && <Text>Loading .....</Text>}
             <View style={styles.overlay}>
                 <Text style={styles.welcome}>Welcome Back To Jabadoor!</Text>
                 <TextInput
@@ -72,7 +91,7 @@ const router = useRouter()
                     value={password}
                     onChangeText={setPassword}
                 />
-                <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                <TouchableOpacity style={styles.loginButton} onPress={()=>handleLogin()}>
                     <Text style={styles.loginButtonText}>LOG IN</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => router.push('register')}>
