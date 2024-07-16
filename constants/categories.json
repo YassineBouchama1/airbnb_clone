@@ -1,0 +1,155 @@
+[
+    {
+      "_id": "66696887601ab6992861d606",
+      "category_code": "lxbmfmra",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718184071/Categories/rk0amdjawvmf0fuenmnh.png",
+      "name": "Riad",
+      "type_service": "hospitality",
+      "status": "active",
+      "added_date": "2024-06-12T09:21:11.926Z"
+    },
+    {
+      "_id": "66696b26601ab6992861d624",
+      "category_code": "lxbmu04a",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718184741/Categories/twkrfrsgneuiupsapdvm.png",
+      "name": "Countryside",
+      "type_service": "real_estate",
+      "status": "active",
+      "added_date": "2024-06-12T09:32:22.426Z"
+    },
+    {
+      "_id": "66696b27601ab6992861d627",
+      "category_code": "lxbmu0z2",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718184743/Categories/yllntcrm0x4grj9bg5h4.png",
+      "name": "Seaside",
+      "type_service": "hospitality",
+      "status": "active",
+      "added_date": "2024-06-12T09:32:23.534Z"
+    },
+    {
+      "_id": "66696b28601ab6992861d62a",
+      "category_code": "lxbmu1st",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718184744/Categories/e0wnyxndhaqszyzvttyf.png",
+      "name": "Swimming Pool",
+      "type_service": "hospitality",
+      "status": "active",
+      "added_date": "2024-06-12T09:32:24.605Z"
+    },
+    {
+      "_id": "66696b29601ab6992861d62d",
+      "category_code": "lxbmu2oi",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718184745/Categories/yilgsbvzjfgema8tywtf.png",
+      "name": "Organic House",
+      "type_service": "real_estate",
+      "status": "active",
+      "added_date": "2024-06-12T09:32:25.746Z"
+    },
+    {
+      "_id": "66696b2a601ab6992861d630",
+      "category_code": "lxbmu3ir",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718184746/Categories/yurzpfkkl0koqhv8y54z.png",
+      "name": "Boats",
+      "type_service": "transport",
+      "status": "active",
+      "added_date": "2024-06-12T09:32:26.835Z"
+    },
+    {
+      "_id": "66696c81601ab6992861d645",
+      "category_code": "lxbn1ft0",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185088/Categories/cdmzpzezaq1ozzaojgmw.png",
+      "name": "Farm",
+      "type_service": "real_estate",
+      "status": "active",
+      "added_date": "2024-06-12T09:38:09.348Z"
+    },
+    {
+      "_id": "66696c82601ab6992861d648",
+      "category_code": "lxbn1gjb",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185089/Categories/rkx6kdrjdlqmlyavdefb.png",
+      "name": "Cabin",
+      "type_service": "real_estate",
+      "status": "active",
+      "added_date": "2024-06-12T09:38:10.296Z"
+    },
+    {
+      "_id": "66696c83601ab6992861d64b",
+      "category_code": "lxbn1hcl",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185090/Categories/qg989zhtaihjqd83385h.png",
+      "name": "Lakeside",
+      "type_service": "real_estate",
+      "status": "active",
+      "added_date": "2024-06-12T09:38:11.349Z"
+    },
+    {
+      "_id": "66696dcd601ab6992861d678",
+      "category_code": "lxbn8k0k",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185421/Categories/rwjwxm2nyeg4mvaiaxct.png",
+      "name": "With View",
+      "type_service": "real_estate",
+      "status": "active",
+      "added_date": "2024-06-12T09:43:41.396Z"
+    },
+    {
+      "_id": "66696e6d601ab6992861d681",
+      "category_code": "lxbnbz8s",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185580/Categories/kasvgu4drwrwyzvfvf6f.png",
+      "name": "Room",
+      "type_service": "hospitality",
+      "status": "active",
+      "added_date": "2024-06-12T09:46:21.100Z"
+    },
+    {
+      "_id": "66696e6d601ab6992861d684",
+      "category_code": "lxbnbzrg",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185581/Categories/myfumkdblag8nkmlyiot.png",
+      "name": "Camping",
+      "type_service": "adventure",
+      "status": "active",
+      "added_date": "2024-06-12T09:46:21.772Z"
+    },
+    {
+      "_id": "66696e6f601ab6992861d687",
+      "category_code": "lxbnc0x6",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185581/Categories/b0emnlqwmzjlioqiwyly.png",
+      "name": "Islands",
+      "type_service": "adventure",
+      "status": "active",
+      "added_date": "2024-06-12T09:46:23.274Z"
+    },
+    {
+      "_id": "66696ff4601ab6992861d6c7",
+      "category_code": "lxbnkdj3",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185972/Categories/gizpvnwpkgqz6wwv9syz.png",
+      "name": "Apartment",
+      "type_service": "real_estate",
+      "status": "active",
+      "added_date": "2024-06-12T09:52:52.863Z"
+    },
+    {
+      "_id": "66696ff5601ab6992861d6ca",
+      "category_code": "lxbnkdyn",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718185973/Categories/oe2adca4zyeyqzjnh0b4.png",
+      "name": "Beaches",
+      "type_service": "hospitality",
+      "status": "active",
+      "added_date": "2024-06-12T09:52:53.423Z"
+    },
+    {
+      "_id": "66697096601ab6992861d6f1",
+      "category_code": "lxbnnu52",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718186133/Categories/mtchfymwap9oim3vjlzg.png",
+      "name": "Historical homes",
+      "type_service": "cultural",
+      "status": "active",
+      "added_date": "2024-06-12T09:55:34.358Z"
+    },
+    {
+      "_id": "666afb6c4accc4355b998cef",
+      "category_code": "lxdbuanl",
+      "image": "https://res.cloudinary.com/dtjqlcv4k/image/upload/v1718287211/Categories/dgtyvonm0x0bmu78cwb8.png",
+      "name": "Your search",
+      "type_service": "hospitality",
+      "status": "active",
+      "added_date": "2024-06-13T14:00:12.658Z"
+    }
+  ]
