@@ -1,19 +1,32 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const AuthContext = createContext({
+export type UserType = {
+  fullName: string,
+  avatar: string,
+}
+
+
+
+const AuthContext = createContext<{
+  isAuthenticated: boolean,
+  userInfo: UserType | null,
+  checkAuthStatus: () => void,
+}>({
   isAuthenticated: false,
   userInfo: null,
   checkAuthStatus: () => { },
 });
 
+
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
+
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<null|UserType>(null);
 
 
   // chekc if token is not provided
@@ -32,23 +45,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (!userCode) return null;
 
-    try {
-      const response = await fetch(`https://azhzx0jphc.execute-api.eu-north-1.amazonaws.com/dev/users/${userCode}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
+// fetch user info from local storage
+return {fullName:"yassine",avatar:'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg'}
 
-      if (response.ok) {
-        return await response.json();
-      } else {
-        throw new Error('Failed to fetch user info');
-      }
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-      return null;
-    }
   };
 
 

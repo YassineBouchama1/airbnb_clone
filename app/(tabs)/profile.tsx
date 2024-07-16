@@ -5,28 +5,29 @@ import { useNavigation } from '@react-navigation/native';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useAuth } from '../AuthContext'; // Adjust the import path as per your project structure
 import { logout } from '../AuthService'; // Adjust the import path as per your project structure
+import { useRouter } from 'expo-router';
 
 const Profile = () => {
-  const { isAuthenticated, userInfo, checkAuthStatus } = useAuth();
-  // const [isLanguageSwitcherVisible, setIsLanguageSwitcherVisible] = useState(false);
-  // const navigation = useNavigation();
-
+  const { isAuthenticated , userInfo, checkAuthStatus }:any = useAuth();
+  const [isLanguageSwitcherVisible, setIsLanguageSwitcherVisible] = useState(false);
+  const navigation = useNavigation();
+const router =  useRouter()
   useEffect(() => {
     
     // Update user info when component mounts or auth status changes
     checkAuthStatus();
   }, []);
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await logout();
-  //     Alert.alert('Logged Out', 'You have been logged out.');
-  //     checkAuthStatus(); // Update auth status after logout
-  //     navigation.navigate('(modal)/login');
-  //   } catch (error) {
-  //     Alert.alert('Logout Failed', 'Please try again.');
-  //   }
-  // };
+  const handleLogout = async () => {
+    try {
+      await logout();
+      Alert.alert('Logged Out', 'You have been logged out.');
+      checkAuthStatus(); // Update auth status after logout
+      router.push('(modal)/login');
+    } catch (error) {
+      Alert.alert('Logout Failed', 'Please try again.');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -80,7 +81,7 @@ const Profile = () => {
           </View>
 
           <View style={styles.section}>
-            <TouchableOpacity onPress={() => navigation.navigate('(modals)/login')} style={styles.row}>
+            <TouchableOpacity onPress={() => router.push('(modals)/login')} style={styles.row}>
               <View style={[styles.rowIcon, { backgroundColor: '#00ccff' }]}>
                 <FeatherIcon color="#fff" name="log-in" size={20} />
               </View>
@@ -91,7 +92,7 @@ const Profile = () => {
           </View>
 
           <View style={styles.section}>
-            <TouchableOpacity onPress={() => navigation.navigate('(modals)/register')} style={styles.row}>
+            <TouchableOpacity onPress={() => router.push('(modals)/register')} style={styles.row}>
               <View style={[styles.rowIcon, { backgroundColor: '#00cc66' }]}>
                 <FeatherIcon color="#fff" name="user-plus" size={20} />
               </View>
