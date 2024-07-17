@@ -5,10 +5,12 @@ import {  useNavigation, useRouter } from 'expo-router';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import MapView from 'react-native-map-clustering';
+import hosts from '../constants/hosts.json';
+import { HostType } from '@/constants/types';
 
 const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | null}) => {
   const [region, setRegion] = useState<any>(null);
-  const [listings, setListings] = useState([]);
+  const [listings, setListings] = useState<HostType[]>([]);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const fetchedListings = useRef(false);
@@ -39,17 +41,15 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
 
     const fetchListings = async () => {
       if (fetchedListings.current) return;
-      try {
-        const response = await axios.get('https://azhzx0jphc.execute-api.eu-north-1.amazonaws.com/dev/hosts');
-        setListings(response.data);
+          //fetch hosts
+          setListings(hosts)
+          setLoading(false)
         fetchedListings.current = true;
-      } catch (error:any) {
-        Alert.alert('Error fetching listings:', error.message);
-      } finally {
-        setLoading(false);
-      }
+    
     };
 
+
+    
     requestLocationPermissions();
     fetchListings();
   }, []);
@@ -102,10 +102,10 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
             <Marker
               key={listing.Host_code}
               onPress={()=>router.push({
-                  pathname: 'listing/[Host_code]',
-                  params: { Host_code: listing.Host_code }
-  
-              })}
+                pathname: 'listing/[Host_code]',
+                params: { Host_code: listing.Host_code }
+    
+            })}
               coordinate={{
                 latitude: parseFloat(listing.latitude),
                 longitude: parseFloat(listing.longitude),
