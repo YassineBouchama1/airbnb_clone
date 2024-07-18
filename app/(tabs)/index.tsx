@@ -13,7 +13,6 @@ const Page = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   
-  
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Screen
@@ -26,6 +25,7 @@ const Page = () => {
           ),
         }}
       />
+      
       <View style={styles.container}>
         <ListingsMap selectedCategory={selectedCategory} />
         <ListingsBottomSheet selectedCategory={selectedCategory} />

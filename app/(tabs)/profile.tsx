@@ -10,8 +10,9 @@ import { useRouter } from 'expo-router';
 const Profile = () => {
   const { isAuthenticated , userInfo, checkAuthStatus }:any = useAuth();
   const [isLanguageSwitcherVisible, setIsLanguageSwitcherVisible] = useState(false);
-  const navigation = useNavigation();
+
 const router =  useRouter()
+
 
   useEffect(() => {
     
@@ -22,17 +23,15 @@ const router =  useRouter()
 
 
   const handleLogout = async () => {
-    await logout();
-
+    await logout(); // will removed local storage 
     checkAuthStatus(); // Update auth status after logout
-    router.replace('/profile');
+    router.replace('/profile'); // after logout will redirect back to profile page
   };
 
 
-
+console.log(userInfo.name)
   return (
     <View style={styles.container}>
-      <Text>Profile</Text>
       {isAuthenticated ? (
         <>
           <View style={styles.profileSection}>
@@ -40,8 +39,11 @@ const router =  useRouter()
               source={{ uri: userInfo?.avatar || 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg' }}
               style={styles.profileImage}
             />
-            <Text style={styles.fullName}>{userInfo?.fullName || 'Full Name'}</Text>
+            <Text style={styles.fullName}>{userInfo?.name }</Text>
+            <Text style={styles.fullName}>{userInfo?.email}</Text>
           </View>
+
+          {/* start LanguageSwitcher */}
 
           <View style={styles.section}>
             <TouchableOpacity onPress={() => setIsLanguageSwitcherVisible(!isLanguageSwitcherVisible)} style={styles.row}>
@@ -54,6 +56,9 @@ const router =  useRouter()
             </TouchableOpacity>
             {isLanguageSwitcherVisible && <LanguageSwitcher />}
           </View>
+          {/* end LanguageSwitcher */}
+
+          {/* start Logout Btn */}
 
           <View style={styles.section}>
             <TouchableOpacity onPress={handleLogout} style={styles.row}>
@@ -65,6 +70,8 @@ const router =  useRouter()
               <FeatherIcon color="#C6C6C6" name="chevron-right" size={20} />
             </TouchableOpacity>
           </View>
+          {/* end Logout Btn */}
+
         </>
       ) : (
         <>

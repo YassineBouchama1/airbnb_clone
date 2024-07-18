@@ -1,61 +1,40 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
 import { Video, ResizeMode } from 'expo-av';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
+import { RadioButton } from 'react-native-paper';
+
 import { router } from 'expo-router';
 
-// type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'index'>;
 
 const Register = () => {
-    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const navigation = useNavigation<RegisterScreenNavigationProp>();
+    const [role, setRole] = useState('user');
 
     const handleSignUp = async () => {
-        try {
-            console.log('Sending sign-up request with:', { username, email, password });
+        const result = await fetch("http://192.168.1.9:3000/auth/signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({name, email, password,role }),
+          });
+        
+          const respo = await result.json();
+      
+          if (respo?.access_token) {
+            router.replace('/login');
+            return;
+          }
 
-            const response : any = await fetch('http://localhost:3000/auth/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password,
-                }),
-            });
-
-            const signUpResponse = await response.json();
-            console.log('Sign-up response:', signUpResponse);
-
-            if (response.ok) {
-                // Directly login the user after successful signup
-                   // Store the tokens and user code in AsyncStorage
-                    await AsyncStorage.setItem('access_token', response.access_token);
-                    await AsyncStorage.setItem('refresh_token', response.refresh_token);
-                    await AsyncStorage.setItem('user_code', response.user_code);
-
-                    Alert.alert('Sign Up and Login Successful', 'You have been logged in.');
-                    router.navigate('index');
-            } else {
-                console.error('Sign-up failed:', signUpResponse);
-                // Handle specific error cases
-                if (signUpResponse.statusCode === 500 && signUpResponse.message.includes('email already exists')) {
-                    Alert.alert('Sign Up Failed', 'Email already exists. Please use a different email.');
-                } else {
-                    Alert.alert('Sign Up Failed', signUpResponse.message || 'Please try again.');
-                }
-            }
-        } catch (error) {
-            console.error('Error during sign up or login:', error);
-            Alert.alert('Error', 'An error occurred. Please try again.');
-        }
+          {
+            Alert.alert(
+              "Signup Failed",
+              "Please check your credentials and try again."
+            );
+           
+          }
     };
 
     return (
@@ -70,11 +49,33 @@ const Register = () => {
             />
             <View style={styles.overlay}>
                 <Text style={styles.welcome}>Welcome To AirBnb Clone!</Text>
+
+
+<View style={styles.role}>
+<View>
+    <Text style={styles.roleText}>User</Text>
+<RadioButton
+        value="user"
+        status={ role === 'user' ? 'checked' : 'unchecked' }
+        onPress={() => setRole('user')}
+      />
+</View>
+
+<View style={styles.roleRadio}>
+<Text style={styles.roleText}>Business</Text>
+
+      <RadioButton
+        value="business"
+        status={ role === 'business' ? 'checked' : 'unchecked' }
+        onPress={() => setRole('business')}
+        />
+        </View>
+    </View>
                 <TextInput
-                    placeholder="Enter Username"
+                    placeholder="Enter Name"
                     style={styles.input}
-                    value={username}
-                    onChangeText={setUsername}
+                    value={name}
+                    onChangeText={setName}
                 />
                 <TextInput
                     placeholder="Enter Email"
@@ -121,6 +122,26 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 10,
         backgroundColor: '#fff',
+    },
+    roleRadio:{
+        
+    },
+    role:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '100%',
+        gap:20,
+        marginVertical: 10,
+    },
+    roleLabel:{
+        color: '#fff',
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    roleText:{
+        fontSize: 16,
+        marginBottom: 5,
+        color: '#fff',
     },
     signUpButton: {
         width: '100%',

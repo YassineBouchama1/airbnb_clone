@@ -4,8 +4,7 @@ import { SplashScreen, Stack, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Colors from '@/constants/Colors';
-import LanguageSwitcher from '../components/LanguageSwitcher';
+
 import i18n from '../services/i18n';
 import { useTranslation } from 'react-i18next';
 import AuthProvider from './AuthContext';
@@ -64,31 +63,31 @@ function RootLayoutNav() {
               fontFamily: 'mon-sb',
             },
             headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity onPress={() => router.replace('/profile')}>
                 <Ionicons name="close-outline" size={28} />
               </TouchableOpacity>
             ),
           }}
           />
         <Stack.Screen
-          name="(modals)/register"  // Ensure the name here matches exactly what you're navigating to
+          name="(modals)/register"  
           options={{
-            headerTitle: '', 
+            headerTitle: 'Create New Account', 
             // headerShown: false ,
             presentation: 'modal',
             headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity onPress={() => router.replace("/profile")}>
                 <Ionicons name="close-outline" size={28} />
               </TouchableOpacity>
             ),
           }}
           />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="listing/[Host_code]" options={{ headerTitle: '', headerShown: false }} />
+        <Stack.Screen name="listing/details" options={{ headerTitle: '', headerShown: false }} />
         <Stack.Screen
           name="(modals)/booking"
           options={{
-            presentation: 'transparentModal',
+            presentation: 'modal',
             animation: 'fade',
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>

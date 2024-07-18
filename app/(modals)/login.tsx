@@ -14,6 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 import { useRouter } from "expo-router";
 import useFetch from "@/hooks/useFetch";
+import { ActivityIndicator } from "react-native-paper";
+import Colors from "@/constants/Colors";
 const API_URL = "http://192.168.1.5:3000"; // Your server IP
 
 interface LoginResponse {
@@ -28,23 +30,22 @@ interface LoginData {
 }
 
 const Login = () => {
-  const [email, setEmail] = useState("user@yassine.info");
+  const [email, setEmail] = useState("Ai@gmail.com");
   const [password, setPassword] = useState("pass123");
-  const { fetchData, loading, error } = useFetch<LoginResponse>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
-  const {userInfo, checkAuthStatus } = useAuth();
-
+  const { userInfo, checkAuthStatus } = useAuth();
 
   useEffect(() => {
     // If user is already authenticated, redirect to index page
     if (userInfo) {
-      router.replace('/');
+      router.replace("/");
     }
   }, [userInfo, router]);
 
-
   const handleLogin = async () => {
+    setIsLoading(true);
     const result = await fetch("http://192.168.1.9:3000/auth/login", {
       method: "POST",
       headers: {
@@ -52,27 +53,30 @@ const Login = () => {
       },
       body: JSON.stringify({ email, password }),
     });
-  
+
     const respo = await result.json();
+
+    setIsLoading(false);
 
     if (respo?.access_token) {
       // save info in local storage
       await AsyncStorage.setItem("access_token", respo.access_token);
       await AsyncStorage.setItem("refresh_token", respo.refresh_token);
-      await AsyncStorage.setItem("userID", String(respo.userId));
-  
+      await AsyncStorage.setItem("user", JSON.stringify(respo.user));
+
       await checkAuthStatus();
 
-      router.replace('/');
-  
+      router.replace("/");
+
       return;
-    }
-    {
-      Alert.alert(
-        "Login Failed",
-        "Please check your credentials and try again."
-      );
-      console.log('error', error);
+    } else {
+      {
+        Alert.alert(
+          "Login Failed",
+          "Please check your credentials and try again."
+        );
+        console.log("error");
+      }
     }
   };
 
@@ -86,9 +90,9 @@ const Login = () => {
         isLooping
         isMuted
       />
-      {loading && <Text>Loading .....</Text>}
+      {isLoading && <ActivityIndicator size="large" color={Colors.primary} />}
       <View style={styles.overlay}>
-        <Text style={styles.welcome}>Welcome Back To Jabadoor!</Text>
+        <Text style={styles.welcome}>Welcome Back To SportFinder!</Text>
         <TextInput
           placeholder="Enter Email"
           style={styles.input}

@@ -29,9 +29,10 @@ export const refreshToken = async () => {
 
 
 export const logout = async () => {
-    const accessToken = await AsyncStorage.removeItem('access_token');
-    const refreshToken = await AsyncStorage.removeItem('refresh_token');
-    const userID = await AsyncStorage.removeItem('userID');
+    await AsyncStorage.removeItem('access_token');
+   await AsyncStorage.removeItem('refresh_token');
+await AsyncStorage.removeItem('user');
+// await AsyncStorage.removeItem('user');
     return true
 };
 

@@ -102,7 +102,7 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
             <Marker
               key={listing.Host_code}
               onPress={()=>router.push({
-                pathname: 'listing/[Host_code]',
+                pathname: 'listing/details',
                 params: { Host_code: listing.Host_code }
     
             })}

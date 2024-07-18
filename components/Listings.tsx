@@ -54,7 +54,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
   useEffect(() => {
     const fetchData = async () => {
       //fetch hosts
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       setListings(hosts)
       setLoading(false)
@@ -85,7 +85,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
         <TouchableOpacity
           key={item.Host_code}
           onPress={()=>router.push({
-            pathname: 'listing/[Host_code]',
+            pathname: 'listing/details',
             params: { Host_code: item.Host_code }
 
         })}
@@ -103,7 +103,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
       </TouchableOpacity>
       <TouchableOpacity 
               onPress={()=>router.push({
-                pathname: 'listing/[Host_code]',
+                pathname: 'listing/details',
                 params: { Host_code: item.Host_code }
 
             })}
@@ -126,11 +126,11 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
   return (
     <View style={{ flex: 1 }}>
       {loading ? (
-        // <ActivityIndicator size="large" color={Colors.primary} />
-    <>
-        <ListingsSkeleton/>
-        <ListingsSkeleton/>
-        </>
+        <ActivityIndicator size="large" color={Colors.primary} />
+    // <>
+    //     <ListingsSkeleton/>
+    //     <ListingsSkeleton/>
+    //     </>
       
       ) : (
         filteredListings.length > 0 ? (

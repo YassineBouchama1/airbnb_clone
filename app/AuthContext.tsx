@@ -24,7 +24,7 @@ export const useAuth = () => {
 };
 
 
-const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState<null|UserType>(null);
 
@@ -41,12 +41,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const accessToken = await AsyncStorage.getItem('access_token');
     if (!accessToken) return null;
 
-    const userCode = await AsyncStorage.getItem('userID');
+    const user = await AsyncStorage.getItem('user');
 
-    if (!userCode) return null;
+    if (!user) return null;
 
 // fetch user info from local storage
-return {fullName:"yassine",avatar:'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg'}
+return JSON.parse(user)
 
   };
 
@@ -54,7 +54,6 @@ return {fullName:"yassine",avatar:'https://img.freepik.com/free-psd/3d-illustrat
   // check if user auth
   const checkAuthStatus = async () => {
 
-    console.log(userInfo)
     // 1 check if user is logged in
     const isLoggedIn = await getUserAuthStatus();
     setIsAuthenticated(isLoggedIn);
