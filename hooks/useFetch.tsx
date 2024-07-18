@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-const API_URL = 'http://192.168.1.5:3000'; // Your server IP
+const API_URL = 'http://192.168.1.9:3000'; // Your server IP
 
 interface FetchOptions extends RequestInit {
   body?: any;
@@ -18,7 +18,7 @@ const useFetch = <T = any>(): FetchResult<T> => {
   const fetchData = useCallback(async (url: string, options: FetchOptions = {}): Promise<T> => {
     setLoading(true);
     setError(null);
-console.log(API_URL+url)
+
     try {
       const response = await fetch(API_URL+url, {
         method: options.method || 'GET',
@@ -26,13 +26,13 @@ console.log(API_URL+url)
           'Content-Type': 'application/json',
           ...options.headers,
         },
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body: options.body ? JSON.stringify({email:options.body.email ,password:options.body.password}) : undefined,
         ...options,
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      // if (!response.access) {
+      //   throw new Error(`HTTP error! status: ${response.status}`);
+      // }
 
       const data: T = await response.json();
       setLoading(false);

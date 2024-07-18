@@ -73,54 +73,54 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
     // render  Card Listing
   const renderItem = ({ item }:{item:HostType}) => (
 
-    <ListingsSkeleton/>
-    // <Animated.View style={styles.card} entering={FadeInRight} exiting={FadeOutLeft}>
-    //   <Carousel
-    //     style={styles.carousel}
-    //     showsControls={false}
-    //     dotStyle={styles.dotStyle}
-    //     activeDotStyle={[styles.dotStyle, { backgroundColor: 'white' }]}
-    //   >
-    //   {item.image.map((img:any) => (
-    //     <TouchableOpacity
-    //       key={item.Host_code}
-    //       onPress={()=>router.push({
-    //         pathname: 'listing/[Host_code]',
-    //         params: { Host_code: item.Host_code }
+    // <ListingsSkeleton/>
+    <Animated.View style={styles.card} entering={FadeInRight} exiting={FadeOutLeft}>
+      <Carousel
+        style={styles.carousel}
+        showsControls={false}
+        dotStyle={styles.dotStyle}
+        activeDotStyle={[styles.dotStyle, { backgroundColor: 'white' }]}
+      >
+      {item.image.map((img:any) => (
+        <TouchableOpacity
+          key={item.Host_code}
+          onPress={()=>router.push({
+            pathname: 'listing/[Host_code]',
+            params: { Host_code: item.Host_code }
 
-    //     })}
-    //       style={{ flex: 1 }}
-    //     >
-    //       <Image
-    //         style={styles.image}
-    //         source={{ uri: img.secure_url }}
-    //       />
-    //     </TouchableOpacity>
-    //   ))}
-    //   </Carousel>
-    //   <TouchableOpacity style={styles.roundButton} onPress={() => shareListing(item)}>
-    //     <AntDesign name="sharealt" size={16} color={'#000'} />
-    //   </TouchableOpacity>
-    //   <TouchableOpacity 
-    //           onPress={()=>router.push({
-    //             pathname: 'listing/[Host_code]',
-    //             params: { Host_code: item.Host_code }
+        })}
+          style={{ flex: 1 }}
+        >
+          <Image
+            style={styles.image}
+            source={{ uri: img.secure_url }}
+          />
+        </TouchableOpacity>
+      ))}
+      </Carousel>
+      <TouchableOpacity style={styles.roundButton} onPress={() => shareListing(item)}>
+        <AntDesign name="sharealt" size={16} color={'#000'} />
+      </TouchableOpacity>
+      <TouchableOpacity 
+              onPress={()=>router.push({
+                pathname: 'listing/[Host_code]',
+                params: { Host_code: item.Host_code }
 
-    //         })}
-    //   >
-    //     <View style={styles.cardContent}>
-    //       <Text style={styles.title}>{item.nom}</Text>
-    //       <Text style={styles.description}>{item.About}</Text>
-    //       <View style={styles.infoRow}>
-    //         <View style={{ flexDirection: 'row' }}>
-    //           <Ionicons name="star" size={16} style={{ marginTop: 2.5 }} />
-    //           <Text style={styles.rating}>{item.Rating}</Text>
-    //         </View>
-    //         <Text style={styles.price}>{t('Price')}: ${item.price}</Text>
-    //       </View>
-    //     </View>
-    //   </TouchableOpacity>
-    // </Animated.View>
+            })}
+      >
+        <View style={styles.cardContent}>
+          <Text style={styles.title}>{item.nom}</Text>
+          <Text style={styles.description}>{item.About}</Text>
+          <View style={styles.infoRow}>
+            <View style={{ flexDirection: 'row' }}>
+              <Ionicons name="star" size={16} style={{ marginTop: 2.5 }} />
+              <Text style={styles.rating}>{item.Rating}</Text>
+            </View>
+            <Text style={styles.price}>{t('Price')}: ${item.price}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
   );
 
   return (

@@ -12,29 +12,29 @@ const Profile = () => {
   const [isLanguageSwitcherVisible, setIsLanguageSwitcherVisible] = useState(false);
   const navigation = useNavigation();
 const router =  useRouter()
+
   useEffect(() => {
     
     // Update user info when component mounts or auth status changes
     checkAuthStatus();
   }, []);
 
+
+
   const handleLogout = async () => {
-    try {
-      await logout();
-      Alert.alert('Logged Out', 'You have been logged out.');
-      checkAuthStatus(); // Update auth status after logout
-      router.push('(modal)/login');
-    } catch (error) {
-      Alert.alert('Logout Failed', 'Please try again.');
-    }
+    await logout();
+
+    checkAuthStatus(); // Update auth status after logout
+    router.replace('/profile');
   };
+
+
 
   return (
     <View style={styles.container}>
       <Text>Profile</Text>
       {isAuthenticated ? (
         <>
-        
           <View style={styles.profileSection}>
             <Image
               source={{ uri: userInfo?.avatar || 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg' }}

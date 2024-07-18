@@ -1,35 +1,10 @@
 import Colors from '@/constants/Colors';
 import React from 'react'
-import { Animated, StyleSheet, View } from 'react-native'
-const pulseAnimation = new Animated.Value(1);
+import { StyleSheet, View } from 'react-native'
 
 const ListingsSkeleton = () =>{
-  const startPulse = () => {
-    Animated.loop(
-      Animated.timing(pulseAnimation, {
-        toValue: 0.5,
-        duration: 1000,
-        useNativeDriver: true, // Improve performance (optional)
-      }),
-      { iterations: Infinity }
-    ).start();
-  };
-
-  React.useEffect(() => {
-    startPulse();
-    // Cleanup function to stop animation on unmount
-    return () => pulseAnimation.stop();
-  }, []);
-
-  const interpolatedStyle = {
-    opacity: pulseAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0.5, 1],
-    }),
-  };
-
   return (
-    <View style={[styles.card ,interpolatedStyle]} >
+    <View style={styles.card} >
 {/* <View style={styles.carousel}/>
 <View style={styles.text1}/>
 <View style={styles.text2}/> */}

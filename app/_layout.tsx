@@ -8,6 +8,7 @@ import Colors from '@/constants/Colors';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import i18n from '../services/i18n';
 import { useTranslation } from 'react-i18next';
+import AuthProvider from './AuthContext';
 
 export {
   ErrorBoundary,
@@ -50,7 +51,7 @@ function RootLayoutNav() {
   const router = useRouter();
 
   return (
-    <>
+    <AuthProvider>
       <Stack>
 
         {/* // if user dosnt login display this */}
@@ -68,12 +69,12 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
           }}
-        />
+          />
         <Stack.Screen
           name="(modals)/register"  // Ensure the name here matches exactly what you're navigating to
           options={{
             headerTitle: '', 
-            headerShown: false ,
+            // headerShown: false ,
             presentation: 'modal',
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>
@@ -81,7 +82,7 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
           }}
-        />
+          />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="listing/[Host_code]" options={{ headerTitle: '', headerShown: false }} />
         <Stack.Screen
@@ -95,8 +96,9 @@ function RootLayoutNav() {
               </TouchableOpacity>
             ),
           }}
-        />
+          />
       </Stack>
-    </>
+  
+  </AuthProvider>
   );
 }

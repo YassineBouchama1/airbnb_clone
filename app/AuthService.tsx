@@ -29,39 +29,13 @@ export const refreshToken = async () => {
 
 
 export const logout = async () => {
-    try {
-        const accessToken = await AsyncStorage.getItem('access_token');
-        const refreshToken = await AsyncStorage.getItem('refresh_token');
-
-        if (!accessToken) throw new Error('No access token available');
-
-        const response = await fetch(`https://azhzx0jphc.execute-api.eu-north-1.amazonaws.com/dev/auth/logout`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ refreshToken })
-        });
-
-        console.log('Logout response:', response);
-
-        if (response.ok) {
-            await AsyncStorage.removeItem('access_token');
-            await AsyncStorage.removeItem('refresh_token');
-            await AsyncStorage.removeItem('user_code');
-        } else {
-            const errorResponse = await response.json();
-            console.error('Error response body:', errorResponse);
-            throw new Error(errorResponse.message || 'Failed to log out');
-        }
-    } catch (error) {
-        console.error('Error during logout:', error);
-        throw error;
-    }
+    const accessToken = await AsyncStorage.removeItem('access_token');
+    const refreshToken = await AsyncStorage.removeItem('refresh_token');
+    const userID = await AsyncStorage.removeItem('userID');
+    return true
 };
 
-export const login = async (email, password) => {
+export const login = async (email:string, password:string) => {
     try {
         const response = await fetch('https://azhzx0jphc.execute-api.eu-north-1.amazonaws.com/dev/auth/login', {
             method: 'POST',

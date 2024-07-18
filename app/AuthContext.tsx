@@ -41,7 +41,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const accessToken = await AsyncStorage.getItem('access_token');
     if (!accessToken) return null;
 
-    const userCode = await AsyncStorage.getItem('user_code');
+    const userCode = await AsyncStorage.getItem('userID');
 
     if (!userCode) return null;
 
@@ -53,6 +53,8 @@ return {fullName:"yassine",avatar:'https://img.freepik.com/free-psd/3d-illustrat
 
   // check if user auth
   const checkAuthStatus = async () => {
+
+    console.log(userInfo)
     // 1 check if user is logged in
     const isLoggedIn = await getUserAuthStatus();
     setIsAuthenticated(isLoggedIn);
