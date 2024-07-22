@@ -44,7 +44,7 @@ const Login = () => {
     setIsLoading(true);
   
     try {
-      const result = await fetch("http://192.168.1.9:3000/auth/login", {
+      const result = await fetch("http://192.168.1.6:3000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

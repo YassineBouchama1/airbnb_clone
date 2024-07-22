@@ -4,6 +4,7 @@ import { SplashScreen, Stack, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 import i18n from '../services/i18n';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,10 @@ export const unstable_settings = {
 };
 
 SplashScreen.preventAutoHideAsync();
+
+
+const queryClient = new QueryClient();
+
 
 export default function RootLayout() {
 
@@ -50,6 +55,8 @@ function RootLayoutNav() {
   const router = useRouter();
 
   return (
+    <QueryClientProvider client={queryClient}>
+
     <AuthProvider>
       <Stack>
 
@@ -99,5 +106,7 @@ function RootLayoutNav() {
       </Stack>
   
   </AuthProvider>
+  </QueryClientProvider>
+
   );
 }

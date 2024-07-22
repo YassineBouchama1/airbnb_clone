@@ -20,6 +20,10 @@ import { useTranslation } from "react-i18next";
 import Carousel from "pinar";
 import hostJson from "@/constants/hosts.json";
 import { HostType } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useMutation } from "@tanstack/react-query";
+import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import { BookingService } from "../lib/reservationApi";
 
 const Page = () => {
   const params = useLocalSearchParams();
@@ -95,32 +99,43 @@ const Page = () => {
     }
   };
 
-  const handleSignUp = async () => {
+  const handleBook = async () => {
     setIsLoading(true);
+    
+    console.log('clicked 1')
+    // get items
+    const token = await AsyncStorage.getItem("access_token");
 
-    try {
-      const result = await fetch("http://192.168.1.9:3000/reservation", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          HotelId: Host_code,
-          checkInDate: "2023-07-21T14:30:00Z",
-          checkOutDate: "2023-07-22T14:30:00Z",
-        }),
-      });
-
-      const response = await result.json();
-      console.log(response);
-    } catch (error) {
-      setIsLoading(false);
-      // Handle network or fetch errors
-      console.error("Login Error:", error);
-      Alert.alert("Login Failed", "An error occurred. Please try again later.");
-    } finally {
-      setIsLoading(false);
+    if (!token) {
+      Alert.alert(
+        "Login Required",
+        "You need to login to book this listing. Please login first.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Login",
+            onPress: () => router.push("/login"),
+          },
+        ]
+      );
     }
+      const response: any = await BookingService();
+
+      setIsLoading(false);
+
+      if (response?.message) {
+        Alert.alert("Booking Successful", response.message);
+        router.push(`/trips`);
+      } else {
+        Alert.alert("Booking Failed", response.message);
+        return;
+      }
+
+   
+
   };
 
   return (
@@ -207,7 +222,7 @@ const Page = () => {
               source={{ uri: host.image[0].secure_url }}
               style={styles.hostImage}
             />
-            <Text style={styles.hostName}>Abd_elhaq</Text>
+            <Text style={styles.hostName}>Yassine Bouchama</Text>
           </View>
         </View>
         <Text style={[styles.hostCardTitle, { marginLeft: 20 }]}>
@@ -311,8 +326,14 @@ const Page = () => {
             <Text style={styles.price}>${host.price}</Text>
             <Text style={{ margin: 4 }}>night</Text>
           </View>
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>{t("Book")}</Text>
+          <TouchableOpacity
+            disabled={isLoading}
+            onPress={() => handleBook()}
+            style={{ ...styles.addButton, opacity: isLoading ? 0.4 : 1 }}
+          >
+            <Text style={styles.addButtonText}>
+              {isLoading ? "Booking" : t("Book")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

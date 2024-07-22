@@ -29,7 +29,7 @@ const Register = () => {
     setIsLoading(true);
   
     try {
-      const result = await fetch("http://192.168.1.9:3000/auth/signup", {
+      const result = await fetch("http://192.168.1.6:3000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,16 +38,17 @@ const Register = () => {
       });
   
       const response = await result.json();
-  console.log(response);
+ 
+
       if (response.access_token) {
         // Save info in local storage
-        await AsyncStorage.setItem("access_token", response.access_token);
-        await AsyncStorage.setItem("refresh_token", response.refresh_token);
-        await AsyncStorage.setItem("user", JSON.stringify(response.user));
+        // await AsyncStorage.setItem("access_token", response.access_token);
+        // await AsyncStorage.setItem("refresh_token", response.refresh_token);
+        // await AsyncStorage.setItem("user", JSON.stringify(response.user));
   
         await checkAuthStatus();
         setIsLoading(false);
-        router.replace("/");
+        router.replace("/login");
       } else if (response.error) {
         // Handle specific error cases
         if (response.statusCode === 401) {
@@ -69,6 +70,7 @@ const Register = () => {
     } finally {
       setIsLoading(false);
     }
+
   };
 
   return (
