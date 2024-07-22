@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import {  useNavigation, useRouter } from 'expo-router';
 import * as Location from 'expo-location';
-import axios from 'axios';
+
 import MapView from 'react-native-map-clustering';
 import hosts from '../constants/hosts.json';
 import { HostType } from '@/constants/types';
@@ -42,7 +42,7 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
     const fetchListings = async () => {
       if (fetchedListings.current) return;
           //fetch hosts
-          setListings(hosts)
+        await  setListings(hosts)
           setLoading(false)
         fetchedListings.current = true;
     

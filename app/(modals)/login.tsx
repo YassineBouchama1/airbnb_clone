@@ -6,16 +6,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  Platform,
 } from "react-native";
-import { Video, ResizeMode } from "expo-av";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 import { useRouter } from "expo-router";
-import useFetch from "@/hooks/useFetch";
-import { ActivityIndicator } from "react-native-paper";
-import Colors from "@/constants/Colors";
+
+import Loader from "../shared/loader";
 const API_URL = "http://192.168.1.5:3000"; // Your server IP
 
 interface LoginResponse {
@@ -46,51 +42,59 @@ const Login = () => {
 
   const handleLogin = async () => {
     setIsLoading(true);
-    const result = await fetch("http://192.168.1.9:3000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const respo = await result.json();
-
-    setIsLoading(false);
-
-    if (respo?.access_token) {
-      // save info in local storage
-      await AsyncStorage.setItem("access_token", respo.access_token);
-      await AsyncStorage.setItem("refresh_token", respo.refresh_token);
-      await AsyncStorage.setItem("user", JSON.stringify(respo.user));
-
-      await checkAuthStatus();
-
-      router.replace("/");
-
-      return;
-    } else {
-      {
-        Alert.alert(
-          "Login Failed",
-          "Please check your credentials and try again."
-        );
-        console.log("error");
+  
+    try {
+      const result = await fetch("http://192.168.1.9:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const response = await result.json();
+  
+      if (response.access_token) {
+        // Save info in local storage
+        await AsyncStorage.setItem("access_token", response.access_token);
+        await AsyncStorage.setItem("refresh_token", response.refresh_token);
+        await AsyncStorage.setItem("user", JSON.stringify(response.user));
+  
+        await checkAuthStatus();
+        setIsLoading(false);
+        router.replace("/");
+      } else if (response.error) {
+        // Handle specific error cases
+        if (response.statusCode === 401) {
+          Alert.alert("Login Failed", response.message);
+        } else if (response.statusCode === 400) {
+          Alert.alert("Login Failed", response.message.join("\n"));
+        } else {
+          Alert.alert("Login Failed", "Unexpected error occurred.");
+        }
+      } else {
+        // Fallback in case of unexpected response structure
+        Alert.alert("Login Failed", "Please check your credentials and try again.");
       }
+    } catch (error) {
+      setIsLoading(false);
+      // Handle network or fetch errors
+      console.error("Login Error:", error);
+      Alert.alert("Login Failed", "An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   return (
+
+    
     <View style={styles.container}>
-      <Video
-        source={require("../../assets/videos/bg1.mp4")}
-        style={StyleSheet.absoluteFill}
-        resizeMode={ResizeMode.COVER}
-        shouldPlay
-        isLooping
-        isMuted
-      />
-      {isLoading && <ActivityIndicator size="large" color={Colors.primary} />}
+
+     {isLoading && <Loader />}
+  
+ 
       <View style={styles.overlay}>
         <Text style={styles.welcome}>Welcome Back To SportFinder!</Text>
         <TextInput
@@ -98,7 +102,7 @@ const Login = () => {
           style={styles.input}
           value={email}
           onChangeText={setEmail}
-        />
+          />
         <TextInput
           placeholder="Enter Password"
           style={styles.input}
@@ -109,7 +113,7 @@ const Login = () => {
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => handleLogin()}
-        >
+          >
           <Text style={styles.loginButtonText}>LOG IN</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push("register")}>
@@ -117,12 +121,14 @@ const Login = () => {
         </TouchableOpacity>
       </View>
     </View>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  
   },
   overlay: {
     flex: 1,

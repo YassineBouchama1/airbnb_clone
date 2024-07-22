@@ -29,7 +29,6 @@ const router =  useRouter()
   };
 
 
-console.log(userInfo.name)
   return (
     <View style={styles.container}>
       {isAuthenticated ? (
@@ -39,7 +38,7 @@ console.log(userInfo.name)
               source={{ uri: userInfo?.avatar || 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg' }}
               style={styles.profileImage}
             />
-            <Text style={styles.fullName}>{userInfo?.name }</Text>
+            <Text style={styles.fullName}>{userInfo?.name}</Text>
             <Text style={styles.fullName}>{userInfo?.email}</Text>
           </View>
 
