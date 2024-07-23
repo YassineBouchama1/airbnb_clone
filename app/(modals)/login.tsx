@@ -12,6 +12,8 @@ import { useAuth } from "../AuthContext";
 import { useRouter } from "expo-router";
 
 import Loader from "../shared/loader";
+import { useMutation } from "@tanstack/react-query";
+import { LoginService } from "../lib/auth";
 const API_URL = "http://192.168.1.5:3000"; // Your server IP
 
 interface LoginResponse {
@@ -26,7 +28,7 @@ interface LoginData {
 }
 
 const Login = () => {
-  const [email, setEmail] = useState("Ai@gmail.com");
+  const [email, setEmail] = useState("bouchamayasssine@gmail.com");
   const [password, setPassword] = useState("pass123");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,6 +42,7 @@ const Login = () => {
     }
   }, [userInfo, router]);
 
+
   const handleLogin = async () => {
     setIsLoading(true);
   
@@ -52,6 +55,7 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
   
+      
       const response = await result.json();
   
       if (response.access_token) {
@@ -69,8 +73,6 @@ const Login = () => {
           Alert.alert("Login Failed", response.message);
         } else if (response.statusCode === 400) {
           Alert.alert("Login Failed", response.message.join("\n"));
-        } else {
-          Alert.alert("Login Failed", "Unexpected error occurred.");
         }
       } else {
         // Fallback in case of unexpected response structure

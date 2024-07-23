@@ -21,9 +21,10 @@ import Carousel from "pinar";
 import hostJson from "@/constants/hosts.json";
 import { HostType } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 import { BookingService } from "../lib/reservationApi";
+import WishListService from "../lib/wishList";
 
 const Page = () => {
   const params = useLocalSearchParams();
@@ -43,6 +44,12 @@ const Page = () => {
       // await new Promise(resolve => setTimeout(resolve, 5000));
 
       setHost(selectedHost);
+
+  const isWishlist =     await WishListService.findOne({Host_code: String(Host_code)})
+
+  if(isWishlist.statusCode === 400){
+    console.log('no one here')
+  }
     };
 
     if (Host_code) {
@@ -50,14 +57,32 @@ const Page = () => {
     }
   }, [Host_code, i18n.language]);
 
-  // while data fetching display loader
-  if (!host) {
-    return (
-      <View style={styles.loadingContainer}>
+
+// check if the host is already in the wish list
+
+
+// while data fetching display loader
+if (!host) {
+  return (
+    <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
+
+//   const { isLoading: isLoadingQuery, isError, data, error } = useQuery({
+//     queryKey: ['wishlist'],
+//     queryFn:  async()=> await WishListService.findOne({Host_code: host.Host_code})
+//   })
+
+  
+
+//   console.log(data)
+// if(isError){
+//   console.log(error)
+//   console.log(data)
+
+// }
 
   const renderAmenity = (amenity: any, index: number) => {
     const amenityName = amenity?.name || t("Unknown Amenity");
@@ -99,30 +124,12 @@ const Page = () => {
     }
   };
 
+
   const handleBook = async () => {
     setIsLoading(true);
-    
-    console.log('clicked 1')
-    // get items
-    const token = await AsyncStorage.getItem("access_token");
 
-    if (!token) {
-      Alert.alert(
-        "Login Required",
-        "You need to login to book this listing. Please login first.",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Login",
-            onPress: () => router.push("/login"),
-          },
-        ]
-      );
-    }
-      const response: any = await BookingService();
+    // get items
+      const response: any = await WishListService.create({Host_code: host.Host_code});
 
       setIsLoading(false);
 
@@ -130,14 +137,33 @@ const Page = () => {
         Alert.alert("Booking Successful", response.message);
         router.push(`/trips`);
       } else {
-        Alert.alert("Booking Failed", response.message);
+        Alert.alert("Booking Failed", response?.message);
         return;
       }
 
-   
-
   };
 
+
+
+  // const handleAddwishlist = async () => {
+
+
+  //   // get items
+  //     const response: any = await AddWishListService({Host_code: host.Host_code});
+
+     
+
+  //     if (response?.message) {
+  //       Alert.alert("Wishlist Added Successful", response.message);
+  //       router.push(`/trips`);
+  //     } else {
+  //       Alert.alert("Wishlist Failed", response?.message);
+  //       return;
+  //     }
+
+  // };
+
+  
   return (
     <ScrollView style={styles.container}>
       <Carousel
@@ -161,7 +187,9 @@ const Page = () => {
         <TouchableOpacity style={styles.roundButton} onPress={shareListing}>
           <Ionicons name="share-outline" size={22} color={"#000"} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.roundButton}>
+        <TouchableOpacity 
+       
+        style={styles.roundButton}>
           <Ionicons name="heart-outline" size={22} color={"#000"} />
         </TouchableOpacity>
       </View>
