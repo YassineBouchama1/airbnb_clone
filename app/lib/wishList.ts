@@ -1,11 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import React from "react";
-import { getToken } from "../helpers/getToken";
 
+
+
+
+// create a new wishlist 
 export const create = async ({Host_code}:{Host_code:string}) => {
 
-const  token = await getToken()
   const res = await fetch("http://192.168.1.6:3000/wishlist", {
     method: "POST",
     headers: {
@@ -23,10 +22,11 @@ const  token = await getToken()
 
 
 
+
  const findOne = async ({Host_code}:{Host_code:string}) => {
 
-    const  token = await getToken()
-      const res = await fetch(`http://192.168.1.6:3000/wishlist/${Host_code}`, {
+
+      const res = await fetch(`http://192.168.1.4:3000/wishlist/${Host_code}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

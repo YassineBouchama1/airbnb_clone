@@ -4,16 +4,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
+  StyleSheet
 } from "react-native";
-import { Video, ResizeMode } from "expo-av";
-import { RadioButton } from "react-native-paper";
 
+import { RadioButton } from "react-native-paper";
 import { useRouter } from "expo-router";
 import Loader from "../shared/loader";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../AuthContext";
+import AuthService from "../lib/auth";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -23,59 +21,31 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { userInfo, checkAuthStatus } = useAuth();
 
-
-  const router = useRouter()
+  const router = useRouter();
   const handleSignUp = async () => {
     setIsLoading(true);
-  
-    try {
-      const result = await fetch("http://192.168.1.6:3000/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({name, email, password ,role}),
-      });
-  
-      const response = await result.json();
- 
 
-      if (response.access_token) {
-        // Save info in local storage
-        // await AsyncStorage.setItem("access_token", response.access_token);
-        // await AsyncStorage.setItem("refresh_token", response.refresh_token);
-        // await AsyncStorage.setItem("user", JSON.stringify(response.user));
-  
-        await checkAuthStatus();
-        setIsLoading(false);
-        router.replace("/login");
-      } else if (response.error) {
-        // Handle specific error cases
-        if (response.statusCode === 401) {
-          Alert.alert("Login Failed", response.message);
-        } else if (response.statusCode === 400) {
-          Alert.alert("Login Failed", typeof response.message === 'object' ?  response.message?.join("\n") : response.message);
-        } else {
-          Alert.alert("Login Failed", "Unexpected error occurred.");
-        }
-      } else {
-        // Fallback in case of unexpected response structure
-        Alert.alert("Login Failed", "Please check your credentials and try again.");
-      }
-    } catch (error) {
-      setIsLoading(false);
-      // Handle network or fetch errors
-      console.error("Login Error:", error);
-      Alert.alert("Login Failed", "An error occurred. Please try again later.");
-    } finally {
-      setIsLoading(false);
+    const result = await AuthService.Registration({
+      name,
+      email,
+      password,
+      role,
+    });
+
+    setIsLoading(false);
+
+    if (result) {
+      router.replace("/login");
+      await checkAuthStatus();
+   console.log("Registration successful");
+    } else {
+      console.log("Registration failed");
     }
-
   };
 
   return (
     <View style={styles.container}>
-     {isLoading && <Loader />}
+      {isLoading && <Loader />}
       <View style={styles.overlay}>
         <Text style={styles.welcome}>Welcome To AirBnb Clone!</Text>
 

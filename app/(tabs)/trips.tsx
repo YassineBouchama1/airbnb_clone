@@ -7,7 +7,7 @@ import { GetReservations } from '../lib/reservationApi';
 
 const Page = () => {
 
-  const {userInfo } = useAuth();
+  const {isAuthenticated } = useAuth();
 
 const router = useRouter()
 
@@ -16,10 +16,10 @@ const query = useQuery({ queryKey: ['reservations'], queryFn: GetReservations })
 
   useEffect(() => {
     // If user is already authenticated, redirect to index page
-    if (userInfo) {
+    if (!isAuthenticated) {
       router.replace('/');
     }
-  }, [userInfo]);
+  }, [isAuthenticated]);
 
 console.log(query.error)
   

@@ -13,27 +13,20 @@ import { useRouter } from "expo-router";
 
 import Loader from "../shared/loader";
 import { useMutation } from "@tanstack/react-query";
-import { LoginService } from "../lib/auth";
+import AuthService from "../lib/auth";
 const API_URL = "http://192.168.1.5:3000"; // Your server IP
 
-interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
-  userId: number;
-}
 
-interface LoginData {
-  email: string;
-  password: string;
-}
 
 const Login = () => {
   const [email, setEmail] = useState("bouchamayasssine@gmail.com");
   const [password, setPassword] = useState("pass123");
   const [isLoading, setIsLoading] = useState(false);
 
+
   const router = useRouter();
-  const { userInfo, checkAuthStatus } = useAuth();
+
+ const { userInfo, checkAuthStatus } = useAuth();
 
   useEffect(() => {
     // If user is already authenticated, redirect to index page
@@ -43,60 +36,27 @@ const Login = () => {
   }, [userInfo, router]);
 
 
+
   const handleLogin = async () => {
     setIsLoading(true);
-  
-    try {
-      const result = await fetch("http://192.168.1.6:3000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      
-      const response = await result.json();
-  
-      if (response.access_token) {
-        // Save info in local storage
-        await AsyncStorage.setItem("access_token", response.access_token);
-        await AsyncStorage.setItem("refresh_token", response.refresh_token);
-        await AsyncStorage.setItem("user", JSON.stringify(response.user));
-  
-        await checkAuthStatus();
-        setIsLoading(false);
-        router.replace("/");
-      } else if (response.error) {
-        // Handle specific error cases
-        if (response.statusCode === 401) {
-          Alert.alert("Login Failed", response.message);
-        } else if (response.statusCode === 400) {
-          Alert.alert("Login Failed", response.message.join("\n"));
-        }
-      } else {
-        // Fallback in case of unexpected response structure
-        Alert.alert("Login Failed", "Please check your credentials and try again.");
-      }
-    } catch (error) {
-      setIsLoading(false);
-      // Handle network or fetch errors
-      console.error("Login Error:", error);
-      Alert.alert("Login Failed", "An error occurred. Please try again later.");
-    } finally {
-      setIsLoading(false);
+
+    // fetch user info from server
+    const result = await AuthService.Login(email, password);
+    setIsLoading(false);
+
+    if (result) {
+      router.replace("/");
+      await checkAuthStatus();
+      console.log("Login successful");
+    } else {
+      console.log("Login failed");
     }
+   
   };
-  
 
   return (
-
-    
     <View style={styles.container}>
-
-     {isLoading && <Loader />}
-  
- 
+      {isLoading && <Loader />}
       <View style={styles.overlay}>
         <Text style={styles.welcome}>Welcome Back To SportFinder!</Text>
         <TextInput
@@ -104,7 +64,7 @@ const Login = () => {
           style={styles.input}
           value={email}
           onChangeText={setEmail}
-          />
+        />
         <TextInput
           placeholder="Enter Password"
           style={styles.input}
@@ -115,7 +75,7 @@ const Login = () => {
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => handleLogin()}
-          >
+        >
           <Text style={styles.loginButtonText}>LOG IN</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push("register")}>
@@ -123,14 +83,12 @@ const Login = () => {
         </TouchableOpacity>
       </View>
     </View>
-
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  
   },
   overlay: {
     flex: 1,

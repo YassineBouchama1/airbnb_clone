@@ -1,51 +1,120 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import { useRouter } from "expo-router";
-import { useAuth } from "../AuthContext";
 import { Alert } from "react-native";
+import { fetchWithTimeout } from "../helpers/fetchWithTimeout";
 
-export const LoginService = async (email:string,password:string) => {
 
 
-    const router = useRouter()
 
-        const result = await fetch("http://192.168.1.6:3000/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({email,password} ),
-        });
+
+const Login = async (email: string, password: string) => {
+
+
+  try {
+
     
-        
-      return await result.json();
-    
-    //     if (response.access_token) {
-    //       // Save info in local storage
-    //       await AsyncStorage.setItem("access_token", response.access_token);
-    //       await AsyncStorage.setItem("refresh_token", response.refresh_token);
-    //       await AsyncStorage.setItem("user", JSON.stringify(response.user));
-    
-    //       await checkAuthStatus();
-      
-    //       router.replace("/");
-    //     } else if (response.error) {
-    //       // Handle specific error cases
-    //       if (response.statusCode === 401) {
-    //         Alert.alert("Login Failed", response.message);
-    //       } else if (response.statusCode === 400) {
-    //         Alert.alert("Login Failed", response.message.join("\n"));
-    //       } else {
-    //         Alert.alert("Login Failed", "Unexpected error occurred.");
-    //       }
-    //     } else {
-    //       // Fallback in case of unexpected response structure
-    //       Alert.alert("Login Failed", "Please check your credentials and try again.");
-    //     }
-    //   } catch (error) {
-     
-    //     // Handle network or fetch errors
-    //     console.error("Login Error:", error);
-    //     Alert.alert("Login Failed", "An error occurred. Please try again later.");
-    //   } 
-  };
+    const result = await fetchWithTimeout("http://192.168.1.4:3000/auth/login", {
+      timeout: 8000, // Adjust the timeout value as needed
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+
+    const response = await result.json();
+
+    if (response.access_token) {
+      console.log("login done");
+      // Save info in local storage
+      await AsyncStorage.setItem("access_token", response.access_token);
+      await AsyncStorage.setItem("refresh_token", response.refresh_token);
+      await AsyncStorage.setItem("user", JSON.stringify(response.user));
+      return true;
+    } else if (response.error) {
+      // Handle specific error cases
+      if (response.statusCode === 401) {
+        Alert.alert("Login Failed", response.message);
+      } else if (response.statusCode === 400) {
+        Alert.alert("Login Failed", response.message.join("\n"));
+      }
+    } else {
+      // Fallback in case of unexpected response structure
+      Alert.alert("Login Failed", "Unexpected error occurred.");
+      return false;
+    }
+  } catch (error:any) {
+
+
+    // if the timeout is reached
+    if(error.name === 'AbortError'){
+      Alert.alert(
+        "Login Failed",
+        "The Timeout Please try again."
+      );
+
+    }
+    // Handle network or fetch errors
+    console.error("Login Error:", error);
+    Alert.alert("Login Failed", "An error occurred. Please try again later.");
+    return false;
+  }
+};
+
+const Registration = async (body: any) => {
+  try {
+
+    const result = await fetchWithTimeout("http://192.168.1.4:3000/auth/signup", {
+      timeout: 8000, // Adjust the timeout value as needed
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+   
+    const response = await result.json();
+
+    if (response.access_token) {
+      return true;
+    } else if (response.error) {
+      // Handle specific error cases
+      if (response.statusCode === 401) {
+        Alert.alert("Login Failed", response.message);
+      } else if (response.statusCode === 400) {
+        Alert.alert(
+          "Login Failed",
+          typeof response.message === "object"
+            ? response.message?.join("\n")
+            : response.message
+        );
+      } else {
+        Alert.alert("Login Failed", "Unexpected error occurred.");
+      }
+    } 
+  } catch (error:any) {
+
+     // if the timeout is reached
+     if(error.name === 'AbortError'){
+      Alert.alert(
+        "Login Failed",
+        "The Timeout Please try again."
+      );
+
+    }
+
+    // Handle network or fetch errors
+    console.error("Login Error:", error);
+    Alert.alert("Login Failed", "An error occurred. Please try again later.");
+
+    return false;
+  }
+};
+
+const AuthService = {
+  Login,
+  Registration,
+};
+
+export default AuthService;
