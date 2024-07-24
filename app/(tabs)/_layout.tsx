@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import Colors from '@/constants/Colors';
+import {COLORS} from '@/constants/theme';
 
 const Layout = () => {
   const { t } = useTranslation();
@@ -10,7 +10,7 @@ const Layout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.primary,
+        tabBarActiveTintColor: COLORS.primary,
         tabBarLabelStyle: {
           fontFamily: 'mon-sb',
           paddingBottom: 6,

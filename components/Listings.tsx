@@ -8,10 +8,10 @@ import {  useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import Carousel from 'pinar';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
-import Colors from '@/constants/Colors';
 import hosts from '../constants/hosts.json';
 import { HostType } from '@/constants/types';
 import ListingsSkeleton from '@/skeletons/ListingsSkeleton';
+import { COLORS } from '@/constants/theme';
 
 
 
@@ -126,7 +126,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
   return (
     <View style={{ flex: 1 }}>
       {loading ? (
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={COLORS.primary} />
     // <>
     //     <ListingsSkeleton/>
     //     <ListingsSkeleton/>
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    color: Colors.primary,
+    color: COLORS.primary,
     padding: 8,
     elevation: 2,
     // borderRadius: 18,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   noListingsText: {
     fontSize: 16,
-    color: Colors.grey,
+    color: COLORS.grey,
     textAlign: 'center',
   },
   hostsSum: {

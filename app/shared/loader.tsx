@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import React from 'react'
-import Colors from '@/constants/Colors'
+import {COLORS} from '@/constants/theme'
 
 const Loader = () => {
   return (
     <View style={styles.body}>
-   <Text>  <ActivityIndicator size="large" color={Colors.primary}/> </Text>
+   <Text>  <ActivityIndicator size="large" color={COLORS.primary}/> </Text>
       </View>
   )
 }

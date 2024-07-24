@@ -12,7 +12,7 @@ const Login = async (email: string, password: string) => {
   try {
 
     
-    const result = await fetchWithTimeout("http://192.168.1.4:3000/auth/login", {
+    const result = await fetchWithTimeout("http:/192.168.227.45:3000/auth/login", {
       timeout: 8000, // Adjust the timeout value as needed
       method: "POST",
       headers: {
@@ -56,7 +56,10 @@ const Login = async (email: string, password: string) => {
     }
     // Handle network or fetch errors
     console.error("Login Error:", error);
-    Alert.alert("Login Failed", "An error occurred. Please try again later.");
+   
+
+      Alert.alert("Login Failed", error[0].TypeError);
+   
     return false;
   }
 };
@@ -64,7 +67,7 @@ const Login = async (email: string, password: string) => {
 const Registration = async (body: any) => {
   try {
 
-    const result = await fetchWithTimeout("http://192.168.1.4:3000/auth/signup", {
+    const result = await fetchWithTimeout("http:/192.168.227.45:3000/auth/signup", {
       timeout: 8000, // Adjust the timeout value as needed
       method: "POST",
       headers: {

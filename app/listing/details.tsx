@@ -8,23 +8,19 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Share,
-  Alert,
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import axios from "axios";
-import Colors from "@/constants/Colors";
+
+
 import { Ionicons } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import { useTranslation } from "react-i18next";
 import Carousel from "pinar";
 import hostJson from "@/constants/hosts.json";
 import { HostType } from "@/constants/types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
-import { BookingService } from "../lib/reservationApi";
-import WishListService from "../lib/wishList";
+import { COLORS } from "@/constants/theme";
+
 
 const Page = () => {
   const params = useLocalSearchParams();
@@ -35,6 +31,8 @@ const Page = () => {
   const { t, i18n } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
+
+  
   useEffect(() => {
     // fetch detail information host
     const fetchHostDetails = async () => {
@@ -42,14 +40,8 @@ const Page = () => {
         (host) => host.Host_code === Host_code
       );
       // await new Promise(resolve => setTimeout(resolve, 5000));
-
       setHost(selectedHost);
 
-  const isWishlist =     await WishListService.findOne({Host_code: String(Host_code)})
-
-  if(isWishlist.statusCode === 400){
-    console.log('no one here')
-  }
     };
 
     if (Host_code) {
@@ -58,31 +50,26 @@ const Page = () => {
   }, [Host_code, i18n.language]);
 
 
-// check if the host is already in the wish list
-
 
 // while data fetching display loader
 if (!host) {
   return (
     <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }
 
-//   const { isLoading: isLoadingQuery, isError, data, error } = useQuery({
-//     queryKey: ['wishlist'],
-//     queryFn:  async()=> await WishListService.findOne({Host_code: host.Host_code})
-//   })
 
-  
 
-//   console.log(data)
-// if(isError){
-//   console.log(error)
-//   console.log(data)
+  // const { isLoading: isLoadingQuery, isError, data, error } = useQuery({
+  //   queryKey: ['reservations'],
+  //   queryFn:  async()=> await LoadReservations()
+  // })
 
-// }
+
+
+
 
   const renderAmenity = (amenity: any, index: number) => {
     const amenityName = amenity?.name || t("Unknown Amenity");
@@ -125,23 +112,23 @@ if (!host) {
   };
 
 
-  const handleBook = async () => {
-    setIsLoading(true);
+  // const handleBook = async () => {
+  //   setIsLoading(true);
 
-    // get items
-      const response: any = await WishListService.create({Host_code: host.Host_code});
+  //   // get items
+  //     const response: any = await WishListService.create({Host_code: host.Host_code});
 
-      setIsLoading(false);
+  //     setIsLoading(false);
 
-      if (response?.message) {
-        Alert.alert("Booking Successful", response.message);
-        router.push(`/trips`);
-      } else {
-        Alert.alert("Booking Failed", response?.message);
-        return;
-      }
+  //     if (response?.message) {
+  //       Alert.alert("Booking Successful", response.message);
+  //       router.push(`/trips`);
+  //     } else {
+  //       Alert.alert("Booking Failed", response?.message);
+  //       return;
+  //     }
 
-  };
+  // };
 
 
 
@@ -356,7 +343,7 @@ if (!host) {
           </View>
           <TouchableOpacity
             disabled={isLoading}
-            onPress={() => handleBook()}
+            // onPress={() => handleBook()}
             style={{ ...styles.addButton, opacity: isLoading ? 0.4 : 1 }}
           >
             <Text style={styles.addButtonText}>
@@ -414,7 +401,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    color: Colors.primary,
+    color: COLORS.primary,
     padding: 8,
     elevation: 2,
   },
@@ -582,7 +569,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   addButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
     width: 90,

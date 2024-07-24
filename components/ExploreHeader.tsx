@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Text, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { Link } from 'expo-router';
-import Colors from '@/constants/Colors';
+import {COLORS} from '@/constants/theme';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +39,7 @@ const ExploreHeader = ({ onSelectCategory }:any) => {
               <Ionicons name="search" size={24} />
               <View>
                 <Text style={{ fontFamily: 'mon-sb' }}>{t('Where to?')}</Text>
-                <Text style={{ color: Colors.grey, fontFamily: 'mon' }}>{t('Anywhere · Any week')}</Text>
+                <Text style={{ color: COLORS.grey, fontFamily: 'mon' }}>{t('Anywhere · Any week')}</Text>
               </View>
             </TouchableOpacity>
           </Link>
@@ -54,7 +54,7 @@ const ExploreHeader = ({ onSelectCategory }:any) => {
           showsHorizontalScrollIndicator={false}
         >
           {loading ? (
-            <ActivityIndicator size="large" color={Colors.primary} />
+            <ActivityIndicator size="large" color={COLORS.primary} />
           ) : (
             categories.map((category:any) => (
               <View key={category.category_code} style={styles.categoryContainer}>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   filterBtn: {
     padding: 10,
     borderWidth: 1,
-    borderColor: Colors.grey,
+    borderColor: COLORS.grey,
     borderRadius: 24,
   },
   searchBtn: {
@@ -125,11 +125,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: Colors.lightGrey,
+    backgroundColor: COLORS.lightGrey,
     
   },
   selectedCategoryBtn: {
-    backgroundColor: Colors.lightGrey,
+    backgroundColor: COLORS.lightGrey,
   },
   underline: {
     height: 2,
@@ -145,11 +145,11 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 13,
     fontFamily: 'mon-sb',
-    color: Colors.grey,
+    color: COLORS.grey,
     textAlign: 'center',
   },
   selectedCategoryText: {
-    color: Colors.grey,
+    color: COLORS.grey,
   },
 });
 

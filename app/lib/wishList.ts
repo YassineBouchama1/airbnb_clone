@@ -5,7 +5,7 @@
 // create a new wishlist 
 export const create = async ({Host_code}:{Host_code:string}) => {
 
-  const res = await fetch("http://192.168.1.6:3000/wishlist", {
+  const res = await fetch("http://192.168.227.45:3000/wishlist", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export const create = async ({Host_code}:{Host_code:string}) => {
   export default WishListService;
 
 // export const GetBookings = async (method = "GET", body = {}) => {
-//   const baseUrl = "http://192.168.1.6:3000";
+//   const baseUrl = "http://192.168.227.45:3000";
 
 //   try {
 //     const url = `${baseUrl}/reservation`;

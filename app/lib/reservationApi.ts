@@ -1,54 +1,75 @@
-import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { fetchWithTimeout } from "../helpers/fetchWithTimeout";
 
+export const CreateReservation = async ({
+  Host_code,
+}: {
+  Host_code: string;
+}) => {
 
-export const BookingService = async ({Host_code}:{Host_code:string}) => {
+  const token = await AsyncStorage.getItem('access_token');
 
-  const res = await fetch("http://192.168.1.4:3000/reservation", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjliZmNhNzU0MWY2YjNlNGUwMmVhMTkiLCJpYXQiOjE3MjE1ODk2MjZ9.BkZ43nlCDWstpnMhmmBLG3uocGBhjm7BRXrbYQ9uHTs`,
-    },
-    body: JSON.stringify({
-      HotelId: Host_code,
-      checkInDate: "2023-09-21T14:30:00Z",
-      checkOutDate: "2023-09-29T14:30:00Z",
-    }),
-  });
+  try {
+    const response = await fetchWithTimeout(
+      "http://192.168.227.45:3000/reservation",
+      {
+        timeout: 8000, // Adjust the timeout value as needed
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          HotelId: Host_code,
+          checkInDate: "2023-09-21T14:30:00Z",
+          checkOutDate: "2023-09-29T14:30:00Z",
+        }),
+      }
+    );
 
-  return res.json();
+    return await response.json();
+  } catch (error: any) {
+    // if the timeout is reached
+    if (error.name === "AbortError") {
+      throw error.name;
+    }
+    // Handle network or fetch errors
+    console.error("Login Error:", error);
+    throw error;
+  }
 };
 
+export const LoadReservations = async () => {
 
+const token = await AsyncStorage.getItem('access_token');
 
-export const GetReservations = async () => {
-    
-    const baseUrl = "http://192.168.1.4:3000";
+  try {
+    const response = await fetchWithTimeout(
+      "http://192.168.227.45:3000/reservation",
+      {
+        timeout: 8000, // Adjust the timeout value as needed
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const res = await response.json();
 
-    try {
-      const url = `${baseUrl}/reservation`;
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer `, // Replace with your actual authorization token
-      };
-  
-      const config = {
-       method: "GET",
-        url,
-        headers,
-      };  
-  
-      const response = await axios(config);
-
-      console.log(response.data)
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching bookings:", error);
-      // return { error: error };
-        throw error;
+    if (res.error) {
+      throw res.message;
     }
-  };
 
+    return res;
+  } catch (error: any) {
 
-
-
+    // if the timeout is reached
+    if (error.name === "AbortError") {
+      throw error.name;
+    }
+    // Handle network or fetch errors
+    console.error("Login Error:", error);
+    throw error;
+  }
+};

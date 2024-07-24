@@ -3,7 +3,7 @@ import { useMemo, useRef } from 'react';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import Listings from '@/components/Listings';
 import { Ionicons } from '@expo/vector-icons';
-import Colors from '@/constants/Colors';
+import {COLORS} from '@/constants/theme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React from 'react';
 
@@ -21,7 +21,7 @@ const ListingsBottomSheet = ({ selectedCategory }: {selectedCategory:null | stri
         index={1}
         snapPoints={snapPoints}
         enablePanDownToClose={false}
-        handleIndicatorStyle={{ backgroundColor: Colors.grey , width: 50, }}
+        handleIndicatorStyle={{ backgroundColor: COLORS.grey , width: 50, }}
         style={styles.sheetContainer}
     >
         <Listings selectedCategory={selectedCategory} />
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   btn: {
-    backgroundColor: Colors.dark,
+    backgroundColor: COLORS.dark,
     padding: 16,
     height: 50,
     borderRadius: 30,
