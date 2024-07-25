@@ -127,11 +127,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
     <View style={{ flex: 1 }}>
       {loading ? (
         <ActivityIndicator size="large" color={COLORS.primary} />
-    // <>
-    //     <ListingsSkeleton/>
-    //     <ListingsSkeleton/>
-    //     </>
-      
+
       ) : (
         filteredListings.length > 0 ? (
           <BottomSheetFlatList 

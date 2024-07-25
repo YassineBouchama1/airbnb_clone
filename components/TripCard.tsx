@@ -1,4 +1,4 @@
-import { useNavigation } from "expo-router";
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,12 +11,12 @@ import { COLORS, SIZES } from "@/constants/theme";
 
 const TripCard = ({ trip }: any) => {
 
-    console.log(trip.item.HotelId)
   return (
     <TouchableWithoutFeedback>
       <SafeAreaView style={styles.container}>
         <View style={{ marginVertical: SIZES.medium }}>
-          <Text style={styles.title}>{trip.item._id}</Text>
+          <Text style={styles.title}>{trip.item.HotelId}</Text>
+          <Text style={styles.title}>{trip.item.checkInDate} - {trip.item.checkOutDate} </Text>
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>

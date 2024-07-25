@@ -46,12 +46,14 @@ const Page = () => {
   };
 
 
+  // if there is a error fetch display alert 
 if(isError){
   Alert.alert(
     "Failed to fetch",
     error.message,
     [
       { text: "ReLogin", onPress: () => router.replace('/login') },
+      { text: "Try Again", onPress:async () => await refetch() },
     ],
     { cancelable: false }
   );

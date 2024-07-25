@@ -4,7 +4,6 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import Listings from '@/components/Listings';
 import { Ionicons } from '@expo/vector-icons';
 import {COLORS} from '@/constants/theme';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React from 'react';
 
 const ListingsBottomSheet = ({ selectedCategory }: {selectedCategory:null | string}) => {
