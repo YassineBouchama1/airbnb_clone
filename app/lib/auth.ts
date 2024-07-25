@@ -10,7 +10,6 @@ const Login = async (email: string, password: string) => {
 
 
   try {
-
     
     const result = await fetchWithTimeout("http:/192.168.227.45:3000/auth/login", {
       timeout: 8000, // Adjust the timeout value as needed

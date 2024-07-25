@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Share,
+  Button,
+  Alert,
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { useLocalSearchParams, useRouter } from "expo-router";
-
-
 import { Ionicons } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import { useTranslation } from "react-i18next";
@@ -20,28 +20,32 @@ import Carousel from "pinar";
 import hostJson from "@/constants/hosts.json";
 import { HostType } from "@/constants/types";
 import { COLORS } from "@/constants/theme";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CreateReservation } from "../lib/reservationApi";
 
+// Define the type for the reservation data
+interface ReservationData {
+  Host_code: string;
+}
 
 const Page = () => {
   const params = useLocalSearchParams();
-  const { Host_code } = params;
+  const Host_code = String(params.Host_code || "");
 
   const [host, setHost] = useState<HostType>();
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
+  const queryClient = useQueryClient();
 
-  
   useEffect(() => {
-    // fetch detail information host
+    // Fetch detail information host
     const fetchHostDetails = async () => {
       const selectedHost = hostJson.find(
         (host) => host.Host_code === Host_code
       );
-      // await new Promise(resolve => setTimeout(resolve, 5000));
       setHost(selectedHost);
-
     };
 
     if (Host_code) {
@@ -49,27 +53,40 @@ const Page = () => {
     }
   }, [Host_code, i18n.language]);
 
+  // Mutation to add a new reservation
+  const mutation = useMutation({
+    mutationFn: async (data: ReservationData) => await CreateReservation(data),
+    onSuccess: () => {
 
+      // after the reservation booked refresh list of trips in page trips
+      queryClient.invalidateQueries({ queryKey: ["reservations"] });
+      Alert.alert(
+        "Reservation",
+        "Successfully Booked",
+        [
+          { text: "OK", onPress: () => router.push('/trips') },
+        ],
+        { cancelable: false }
+      );
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
-// while data fetching display loader
-if (!host) {
-  return (
-    <View style={styles.loadingContainer}>
+  // fun for excut the queries
+  const handleAddReservation = () => {
+    mutation.mutate({ Host_code });
+  };
+
+  // While data is fetching, display loader
+  if (!host) {
+    return (
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }
-
-
-
-  // const { isLoading: isLoadingQuery, isError, data, error } = useQuery({
-  //   queryKey: ['reservations'],
-  //   queryFn:  async()=> await LoadReservations()
-  // })
-
-
-
-
 
   const renderAmenity = (amenity: any, index: number) => {
     const amenityName = amenity?.name || t("Unknown Amenity");
@@ -111,46 +128,6 @@ if (!host) {
     }
   };
 
-
-  // const handleBook = async () => {
-  //   setIsLoading(true);
-
-  //   // get items
-  //     const response: any = await WishListService.create({Host_code: host.Host_code});
-
-  //     setIsLoading(false);
-
-  //     if (response?.message) {
-  //       Alert.alert("Booking Successful", response.message);
-  //       router.push(`/trips`);
-  //     } else {
-  //       Alert.alert("Booking Failed", response?.message);
-  //       return;
-  //     }
-
-  // };
-
-
-
-  // const handleAddwishlist = async () => {
-
-
-  //   // get items
-  //     const response: any = await AddWishListService({Host_code: host.Host_code});
-
-     
-
-  //     if (response?.message) {
-  //       Alert.alert("Wishlist Added Successful", response.message);
-  //       router.push(`/trips`);
-  //     } else {
-  //       Alert.alert("Wishlist Failed", response?.message);
-  //       return;
-  //     }
-
-  // };
-
-  
   return (
     <ScrollView style={styles.container}>
       <Carousel
@@ -174,9 +151,7 @@ if (!host) {
         <TouchableOpacity style={styles.roundButton} onPress={shareListing}>
           <Ionicons name="share-outline" size={22} color={"#000"} />
         </TouchableOpacity>
-        <TouchableOpacity 
-       
-        style={styles.roundButton}>
+        <TouchableOpacity style={styles.roundButton}>
           <Ionicons name="heart-outline" size={22} color={"#000"} />
         </TouchableOpacity>
       </View>
@@ -278,62 +253,6 @@ if (!host) {
                 temporibus ipsam! Illo, mollitia!
               </Text>
             </View>
-            <View style={styles.reviewContainer}>
-              <View style={styles.reviewProfileContainer}>
-                <Image
-                  source={{ uri: host.image[3].secure_url }}
-                  style={styles.reviewerImage}
-                />
-                <Text style={styles.reviewerName}>Omar</Text>
-              </View>
-              <Text style={styles.reviewMessage}>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Possimus ullam alias praesentium magnam mollitia eum aut
-                temporibus ipsam! Illo, mollitia!
-              </Text>
-            </View>
-            <View style={styles.reviewContainer}>
-              <View style={styles.reviewProfileContainer}>
-                <Image
-                  source={{ uri: host.image[3].secure_url }}
-                  style={styles.reviewerImage}
-                />
-                <Text style={styles.reviewerName}>Omar</Text>
-              </View>
-              <Text style={styles.reviewMessage}>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Possimus ullam alias praesentium magnam mollitia eum aut
-                temporibus ipsam! Illo, mollitia!
-              </Text>
-            </View>
-            <View style={styles.reviewContainer}>
-              <View style={styles.reviewProfileContainer}>
-                <Image
-                  source={{ uri: host.image[3].secure_url }}
-                  style={styles.reviewerImage}
-                />
-                <Text style={styles.reviewerName}>Omar</Text>
-              </View>
-              <Text style={styles.reviewMessage}>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Possimus ullam alias praesentium magnam mollitia eum aut
-                temporibus ipsam! Illo, mollitia!
-              </Text>
-            </View>
-            <View style={styles.reviewContainer}>
-              <View style={styles.reviewProfileContainer}>
-                <Image
-                  source={{ uri: host.image[3].secure_url }}
-                  style={styles.reviewerImage}
-                />
-                <Text style={styles.reviewerName}>Omar</Text>
-              </View>
-              <Text style={styles.reviewMessage}>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Possimus ullam alias praesentium magnam mollitia eum aut
-                temporibus ipsam! Illo, mollitia!
-              </Text>
-            </View>
           </View>
         </ScrollView>
         <View style={styles.buttonContainer}>
@@ -342,12 +261,15 @@ if (!host) {
             <Text style={{ margin: 4 }}>night</Text>
           </View>
           <TouchableOpacity
-            disabled={isLoading}
-            // onPress={() => handleBook()}
-            style={{ ...styles.addButton, opacity: isLoading ? 0.4 : 1 }}
+            disabled={mutation.isPending}
+            onPress={() => handleAddReservation()}
+            style={{
+              ...styles.addButton,
+              opacity: mutation.isPending ? 0.4 : 1,
+            }}
           >
             <Text style={styles.addButtonText}>
-              {isLoading ? "Booking" : t("Book")}
+              {mutation.isPending ? "Booking" : t("Book")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -355,7 +277,6 @@ if (!host) {
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -585,6 +506,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  btnContainer: {
+    margin: 20,
   },
 });
 

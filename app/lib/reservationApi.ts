@@ -2,13 +2,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchWithTimeout } from "../helpers/fetchWithTimeout";
 
 export const CreateReservation = async ({
-  Host_code,
+  Host_code
 }: {
   Host_code: string;
 }) => {
 
   const token = await AsyncStorage.getItem('access_token');
-
+  if (!token) {
+    throw new Error('No access token found');
+  }
   try {
     const response = await fetchWithTimeout(
       "http://192.168.227.45:3000/reservation",
@@ -42,7 +44,9 @@ export const CreateReservation = async ({
 export const LoadReservations = async () => {
 
 const token = await AsyncStorage.getItem('access_token');
-
+if (!token) {
+  throw new Error('No access token found');
+}
   try {
     const response = await fetchWithTimeout(
       "http://192.168.227.45:3000/reservation",
