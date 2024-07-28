@@ -80,10 +80,6 @@ const Page = () => {
     },
   });
 
-
-
-
-
   // fun for excut the queries
   const handleAddReservation = () => {
     // validation data
@@ -116,13 +112,14 @@ const Page = () => {
             onChange={(dates) => {
               setStartDate(dates.startDate as dayjs.Dayjs);
               setEndDate(dates.endDate as dayjs.Dayjs);
-               // Calculate the total number of days selected
-    const totalDays = dayjs(dates.endDate).diff(dayjs(dates.startDate), 'days');
+              // Calculate the total number of days selected
+              const totalDays = dayjs(dates.endDate).diff(
+                dayjs(dates.startDate),
+                "days"
+              );
 
-    // Update the price based on the total number of days selected
-    setTotalDays(totalDays )
-   
-        
+              // Update the price based on the total number of days selected
+              setTotalDays(totalDays);
             }}
             dates={["2024-07-09", "2024-07-19"]}
             calendarTextStyle={styles.calendarTextStyle}
@@ -132,9 +129,7 @@ const Page = () => {
 
         <View style={styles.buttonContainer}>
           <View style={{ flexDirection: "row" }}>
-            <Text  style={styles.price}>
-              ${host.price * totalDays}
-            </Text>
+            <Text style={styles.price}>${host.price * totalDays}</Text>
             <Text style={{ margin: 4 }}>night</Text>
           </View>
           <TouchableOpacity

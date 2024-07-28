@@ -21,10 +21,13 @@ import hostJson from "@/constants/hosts.json";
 import { HostType } from "@/constants/types";
 import { COLORS } from "@/constants/theme";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { Image as ExpoImage } from "expo-image";
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 
+
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 
 const HostCarousel = ({host}:{host:HostType}) => {
@@ -69,11 +72,16 @@ const shareListing = async () => {
         activeDotStyle={[styles.dotStyle, { backgroundColor: "white" }]}
         >
         {host.image.map((img:any) => (
-          <Image
-            style={styles.images}
-            source={{ uri: img?.secure_url }}
-            key={host.Host_code}
-          />
+  
+          <ExpoImage
+         
+          style={styles.images}
+          source={{ uri: img?.secure_url  }}
+          placeholder={{ blurhash }}
+          contentFit="cover"
+          transition={1000}
+          key={host.Host_code}
+        />
         ))}
       </Carousel>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>

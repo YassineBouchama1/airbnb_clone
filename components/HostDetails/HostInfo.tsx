@@ -24,6 +24,7 @@ const HostInfo = ({host}:{host:HostType}) => {
   return (
     
     <>
+     <Text style={styles.title}>{host.nom}</Text>
           <View
           style={{
             flexDirection: "row",

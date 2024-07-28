@@ -5,13 +5,13 @@ import { fetchWithTimeout } from "../helpers/fetchWithTimeout";
 
 
 
-
+const URL = 'http://192.168.1.3:3000/auth';
 const Login = async (email: string, password: string) => {
-
+console.log(URL)
 
   try {
     
-    const result = await fetchWithTimeout("http:/192.168.227.45:3000/auth/login", {
+    const result = await fetchWithTimeout(`${URL}/login`, {
       timeout: 8000, // Adjust the timeout value as needed
       method: "POST",
       headers: {
@@ -66,7 +66,7 @@ const Login = async (email: string, password: string) => {
 const Registration = async (body: any) => {
   try {
 
-    const result = await fetchWithTimeout("http:/192.168.227.45:3000/auth/signup", {
+    const result = await fetchWithTimeout(`${URL}/signup`, {
       timeout: 8000, // Adjust the timeout value as needed
       method: "POST",
       headers: {

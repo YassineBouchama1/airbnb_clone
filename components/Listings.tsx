@@ -1,10 +1,7 @@
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableOpacity, Share } from 'react-native';
 import * as FileSystem from 'expo-file-system';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
-import {  useNavigation, useRouter } from 'expo-router';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import Carousel from 'pinar';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
@@ -12,34 +9,12 @@ import hosts from '../constants/hosts.json';
 import { HostType } from '@/constants/types';
 import ListingsSkeleton from '@/skeletons/ListingsSkeleton';
 import { COLORS } from '@/constants/theme';
+import { useQuery } from '@tanstack/react-query';
+import { LoadHostels } from '@/app/lib/hostelAPi';
+import HostCard from './hostCard';
 
 
 
-const shareListing = async (item:HostType) => {
-  if (!item || !item.Host_code) {
-    console.error('Host data or Host code is not available.');
-    alert('Host data or Host code is not available.');
-    return;
-  }
-
-  try {
-    const imageUrl = item.image[0].secure_url;
-    const imageUri = `${FileSystem.cacheDirectory}${item.Host_code}.jpg`;
-
-    await FileSystem.downloadAsync(imageUrl, imageUri);
-
-    await Share.share({
-      title: `Check out this wonderful Host: ${item.nom}`,
-      message: `Check out this wonderful Host: ${item.nom}\n\nLink: https://main.d11i2xf9qyhgyw.amplifyapp.com/host/${item.Host_code}`,
-      url: imageUri,
-    });
-
-    console.log('Shared successfully');
-  } catch (error:any) {
-    console.error('Error sharing listing:', error.message);
-    alert(`Error sharing: ${error.message}`);
-  }
-};
 
 
 
@@ -48,7 +23,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
   const [listings, setListings] = useState<HostType[]>([]);
   const [loading, setLoading] = useState(true);
   const { t, i18n } = useTranslation(); // Get the current language
-  const router = useRouter();
+
 
 
   useEffect(() => {
@@ -64,64 +39,24 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
   }, [i18n.language]);
 
 
-  // filter data for selectedCatagory
-  const filteredListings = selectedCategory && selectedCategory !== 'all'
-    ? listings.filter((listing:any) => listing.category.category_code === selectedCategory)
+
+
+  // GetReservations
+  const { data, isLoading, isError, error, refetch } = useQuery({ queryKey: ['reservations'], queryFn: LoadHostels });
+
+
+
+
+ // filter data for selectedCategory 
+ const filteredListings = useMemo(() => {
+  return selectedCategory && selectedCategory !== 'all'
+    ? listings.filter((listing: any) => listing.category.category_code === selectedCategory)
     : listings;
+}, [selectedCategory, listings]);
 
 
-    // render  Card Listing
-  const renderItem = ({ item }:{item:HostType}) => (
 
-    // <ListingsSkeleton/>
-    <Animated.View style={styles.card} entering={FadeInRight} exiting={FadeOutLeft}>
-      <Carousel
-        style={styles.carousel}
-        showsControls={false}
-        dotStyle={styles.dotStyle}
-        activeDotStyle={[styles.dotStyle, { backgroundColor: 'white' }]}
-      >
-      {item.image.map((img:any) => (
-        <TouchableOpacity
-          key={item.Host_code}
-          onPress={()=>router.push({
-            pathname: 'listing/details',
-            params: { Host_code: item.Host_code }
 
-        })}
-          style={{ flex: 1 }}
-        >
-          <Image
-            style={styles.image}
-            source={{ uri: img.secure_url }}
-          />
-        </TouchableOpacity>
-      ))}
-      </Carousel>
-      <TouchableOpacity style={styles.roundButton} onPress={() => shareListing(item)}>
-        <AntDesign name="sharealt" size={16} color={'#000'} />
-      </TouchableOpacity>
-      <TouchableOpacity 
-              onPress={()=>router.push({
-                pathname: 'listing/details',
-                params: { Host_code: item.Host_code }
-
-            })}
-      >
-        <View style={styles.cardContent}>
-          <Text style={styles.title}>{item.nom}</Text>
-          <Text style={styles.description}>{item.About}</Text>
-          <View style={styles.infoRow}>
-            <View style={{ flexDirection: 'row' }}>
-              <Ionicons name="star" size={16} style={{ marginTop: 2.5 }} />
-              <Text style={styles.rating}>{item.Rating}</Text>
-            </View>
-            <Text style={styles.price}>{t('Price')}: ${item.price}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </Animated.View>
-  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -133,7 +68,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
           <BottomSheetFlatList 
             data={filteredListings}
             keyExtractor={(item:HostType) => item.Host_code}
-            renderItem={renderItem}
+            renderItem={({ item }: { item: HostType }) => <HostCard item={item} />}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20, marginHorizontal: 20, marginTop: 20 }}
             ListHeaderComponent={filteredListings.length > 0 ? (
@@ -155,70 +90,8 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginBottom: 20,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 5 },
-  },
-  carousel: {
-    width: '100%',
-    height: 250,
-  },
-  dotStyle: {
-    width: 7,
-    height: 7,
-    backgroundColor: 'silver',
-    marginHorizontal: 3,
-    borderRadius: 8,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  roundButton:{
-    position: 'absolute', 
-    right: 6, 
-    top: 8,
-    borderRadius: 50,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: COLORS.primary,
-    padding: 8,
-    elevation: 2,
-    // borderRadius: 18,
-  },
-  cardContent: {
-    padding: 15,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  description: {
-    fontSize: 14,
-    color: '#888',
-    marginBottom: 10,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  rating: {
-    fontSize: 16,
-  },
-  price: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: 'bold',
-  },
+
+
   noListingsContainer: {
     flex: 1,
     justifyContent: 'center',

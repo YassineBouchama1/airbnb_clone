@@ -9,7 +9,7 @@ interface ReservationData {
   endDate: dayjs.Dayjs | string;
 }
 
-const URL = 'http/192.168.1.3:3000/reservation';
+const URL = 'http/192.168.1.3:3000/hostel';
 
 
 export const CreateReservation = async ({
@@ -53,11 +53,8 @@ export const CreateReservation = async ({
   }
 };
 
-export const LoadReservations = async () => {
-  const token = await AsyncStorage.getItem("access_token");
-  if (!token) {
-    throw new Error("No access token found");
-  }
+export const LoadHostels = async () => {
+
   try {
     const response = await fetchWithTimeout(
       URL,
@@ -65,8 +62,8 @@ export const LoadReservations = async () => {
         timeout: 8000, // Adjust the timeout value as needed
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        
         },
       }
     );
