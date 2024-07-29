@@ -9,7 +9,7 @@ interface ReservationData {
   endDate: dayjs.Dayjs | string;
 }
 
-const URL = 'http/192.168.1.3:3000/reservation';
+const URL = 'http://192.168.0.170:3000/reservation';
 
 
 export const CreateReservation = async ({

@@ -20,60 +20,54 @@ import HostCard from './hostCard';
 
 
 const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
-  const [listings, setListings] = useState<HostType[]>([]);
-  const [loading, setLoading] = useState(true);
+
   const { t, i18n } = useTranslation(); // Get the current language
 
 
 
+
+
+  // GetHostes
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['reservations', selectedCategory],
+    queryFn: () => LoadHostels(selectedCategory ?? ''),
+  
+  });
+
+
+
+  // when selected category changed we reload the hostels from api by new selected category
   useEffect(() => {
-    const fetchData = async () => {
-      //fetch hosts
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      setListings(hosts)
-      setLoading(false)
-}
-
-    fetchData();
-  }, [i18n.language]);
+    if (selectedCategory) {
+      refetch();
+    }
+  }, [selectedCategory, refetch]);
 
 
 
 
-  // GetReservations
-  const { data, isLoading, isError, error, refetch } = useQuery({ queryKey: ['reservations'], queryFn: LoadHostels });
+  function onEndReached (){
 
-
-
-
- // filter data for selectedCategory 
- const filteredListings = useMemo(() => {
-  return selectedCategory && selectedCategory !== 'all'
-    ? listings.filter((listing: any) => listing.category.category_code === selectedCategory)
-    : listings;
-}, [selectedCategory, listings]);
-
-
-
-
+    console.log("onEndReached")
+  }
 
   return (
     <View style={{ flex: 1 }}>
-      {loading ? (
+      {isLoading ? (
         <ActivityIndicator size="large" color={COLORS.primary} />
 
       ) : (
-        filteredListings.length > 0 ? (
+        data?.length > 0 ? (
           <BottomSheetFlatList 
-            data={filteredListings}
-            keyExtractor={(item:HostType) => item.Host_code}
-            renderItem={({ item }: { item: HostType }) => <HostCard item={item} />}
+            data={data}
+            keyExtractor={(item:any) => item._id}
+            renderItem={({ item }: { item: any }) => <HostCard item={item} />}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20, marginHorizontal: 20, marginTop: 20 }}
-            ListHeaderComponent={filteredListings.length > 0 ? (
-              <Text style={styles.hostsSum}>{filteredListings.length} homes</Text>
+            ListHeaderComponent={data.length > 0 ? (
+              <Text style={styles.hostsSum}>{data?.length} homes</Text>
             ) : null}
+            onEndReached={onEndReached}
           />
         ) : (
           <View style={styles.noListingsContainer}>

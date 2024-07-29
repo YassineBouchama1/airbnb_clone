@@ -12,6 +12,26 @@ export interface CategoriesType {
   }
 
 
-  export type HostType =  typeof hosts[0]
+  // export type HostType =  typeof hosts[0]
 
   export type CategoryType =  typeof categories[0]
+
+
+  // 
+  export interface HostType  {
+    _id: string; 
+    name: string;
+    About: string;
+    address: string;
+    latitude: number; 
+    longitude: number; 
+    price: number; 
+    category: string;
+    amenities: string[]; 
+    userId: string; 
+    images: string[]; 
+    beds: number; 
+    status: boolean;
+    __v: number;
+  }
+  

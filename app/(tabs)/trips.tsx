@@ -7,23 +7,36 @@ import { LoadReservations } from '../lib/reservationApi';
 import { FlashList } from "@shopify/flash-list";
 import { COLORS, FONTS, SIZES } from '@/constants/theme';
 import TripCard from '@/components/TripCard';
+import NoInternetWarning from '@/hooks/useInternetConnection';
+
+
+
 
 const Page = () => {
+
+
+
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
   // State to handle the refreshing status
-  const [refreshing, setRefreshing] = useState(false);
-
+  
   // GetReservations
-  const { data, isLoading, isError, error, refetch } = useQuery({ queryKey: ['reservations'], queryFn: LoadReservations });
-
+  
   useEffect(() => {
     // If user is not authenticated, redirect to index page
     if (!isAuthenticated) {
       router.replace('/');
     }
   }, [isAuthenticated]);
+  
+
+/// chekc if there is a internet
+
+  
+  const { data, isLoading, isError, error, refetch } = useQuery({ queryKey: ['reservations'], queryFn: LoadReservations });
+  const [refreshing, setRefreshing] = useState(false);
+
 
 
 
@@ -67,6 +80,7 @@ if(isError){
 
   return (
     <SafeAreaView style={styles.container}>
+   
       {(isError || data?.error) && <View><Text>error</Text></View>}
       {isLoading ? (
         <ActivityIndicator size="large" color={COLORS.primary} />

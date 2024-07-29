@@ -16,7 +16,10 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We need your location to show listings near you."
-      }
+      },
+      "entitlements": {
+      "com.apple.developer.networking.wifi-info": true
+    }
     },
     "android": {
       "adaptiveIcon": {

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import * as FileSystem from "expo-file-system";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
@@ -24,23 +24,30 @@ import { Image as ExpoImage } from "expo-image";
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
+type ImgType = {
+  public_id: string
+  url: string,
+  secure_url:string,
+  format: string
+}
+
 const shareListing = async (item: HostType) => {
   console.log("share btn");
-  if (!item || !item._id) {
+  if (!item || !item.Host_code) {
     console.error("Host data or Host code is not available.");
     alert("Host data or Host code is not available.");
     return;
   }
 
   try {
-    const imageUrl = item.images[0];
-    const imageUri = `${FileSystem.cacheDirectory}${item._id}.jpg`;
+    const imageUrl = item.image[0].secure_url;
+    const imageUri = `${FileSystem.cacheDirectory}${item.Host_code}.jpg`;
 
     await FileSystem.downloadAsync(imageUrl, imageUri);
 
     await Share.share({
-      title: `Check out this wonderful Host: ${item.name}`,
-      message: `Check out this wonderful Host: ${item.name}\n\nLink: https://main.d11i2xf9qyhgyw.amplifyapp.com/host/${item.Host_code}`,
+      title: `Check out this wonderful Host: ${item.nom}`,
+      message: `Check out this wonderful Host: ${item.nom}\n\nLink: https://main.d11i2xf9qyhgyw.amplifyapp.com/host/${item.Host_code}`,
       url: imageUri,
     });
 
@@ -76,8 +83,6 @@ const HostCard = ({
   function shareBtn(item: HostType) {
     shareListing(item);
   }
-
-
   return (
     <Animated.View
       style={styles.card}
@@ -90,50 +95,59 @@ const HostCard = ({
         dotStyle={styles.dotStyle}
         activeDotStyle={[styles.dotStyle, { backgroundColor: "white" }]}
       >
-        {item.images.map((img: string) => (
-          <TouchableOpacity
-            key={item._id}
-            onPress={() =>
-              router.push({
-                pathname: "listing/details",
-                params: { Host_code: item._id },
-              })
-            }
-            style={{ flex: 1 }}
-          >
+        {item.image.map((img: ImgType) => (
+
+<Fragment key={img.public_id}>
+ 
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "listing/details",
+                  params: { Host_code: item.Host_code },
+                })
+              }
+              style={{ flex: 1 }}
+              />
+
             <ExpoImage
               style={styles.image}
-              source={{ uri: img }}
+              source={{ uri: img.secure_url }}
               placeholder={{ blurhash }}
               contentFit="cover"
               transition={1000}
-            />
+              
+              />
+      
+              </Fragment>
+        
+
+
+
+            
          
-          </TouchableOpacity>
         ))}
       </Carousel>
-     <TouchableOpacity
+      <TouchableOpacity
         style={styles.roundButton}
         onPress={() => shareListing(item)}
       >
         <AntDesign name="sharealt" size={16} color={"#000"} />
       </TouchableOpacity>
-    
-      <TouchableOpacity onPress={() => navigateToDetails(item._id)}>
+      <TouchableOpacity onPress={() => navigateToDetails(item.Host_code)}>
         <View style={styles.cardContent}>
-          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.title}>{item.nom}</Text>
           <Text style={styles.description}>{item.About}</Text>
           <View style={styles.infoRow}>
             <View style={{ flexDirection: "row" }}>
               <Ionicons name="star" size={16} style={{ marginTop: 2.5 }} />
-              <Text style={styles.rating}>5</Text>
+              <Text style={styles.rating}>{item.Rating}</Text>
             </View>
             <Text style={styles.price}>
               {t("Price")}: ${item.price}
             </Text>
           </View>
         </View>
-      </TouchableOpacity> 
+      </TouchableOpacity>
     </Animated.View>
   );
 };

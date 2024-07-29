@@ -1,12 +1,12 @@
 
 
 
-const URL = 'http://192.168.1.3:3000/wishlist';
+const URL = 'http://192.168.0.170:3000/wishlist';
 
 // create a new wishlist 
 export const create = async ({Host_code}:{Host_code:string}) => {
 
-  const res = await fetch("http://192.168.1.3:3000/wishlist", {
+  const res = await fetch("http://192.168.0.170:3000/wishlist", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -9,7 +9,7 @@ interface ReservationData {
   endDate: dayjs.Dayjs | string;
 }
 
-const URL = 'http/192.168.1.3:3000/hostel';
+const URL = 'http://192.168.0.170:3000/hostel';
 
 
 export const CreateReservation = async ({
@@ -53,11 +53,11 @@ export const CreateReservation = async ({
   }
 };
 
-export const LoadHostels = async () => {
+export const LoadHostels = async (selectedCategory:string) => {
 
   try {
     const response = await fetchWithTimeout(
-      URL,
+      URL+'?cat='+selectedCategory,
       {
         timeout: 8000, // Adjust the timeout value as needed
         method: "GET",
