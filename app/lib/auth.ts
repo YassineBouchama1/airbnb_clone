@@ -5,7 +5,7 @@ import { fetchWithTimeout } from "../helpers/fetchWithTimeout";
 
 
 
-const URL = 'http://192.168.1.3:3000/auth';
+const URL = 'http://192.168.0.170:3000/auth';
 const Login = async (email: string, password: string) => {
 console.log(URL)
 

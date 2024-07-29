@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useRef,
   useCallback,
+  useContext,
 } from "react";
 import { View, Text, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
@@ -16,12 +17,21 @@ import { HostType } from "@/constants/types";
 import { useQuery, useQueryClient, } from "@tanstack/react-query";
 import { LoadHostels } from "@/app/lib/hostelAPi";
 import { COLORS } from "@/constants/theme";
+import { HostelContext } from "@/app/context/hostelContext";
+import SliderDistanceKm from "./SliderDistanceKm";
+import { LIMIT, PAGE } from "@/constants/fetchSetting";
 
 const ListingsMap = React.memo(
-  ({ selectedCategory,selectedMaxDistanceKm }: { selectedCategory: string | null,selectedMaxDistanceKm:number }) => {
+  () => {
     const [region, setRegion] = useState<any>(null);
     const [loadingLocation, setLoadingLocation] = useState<boolean>(true);
     const queryClient = useQueryClient();
+
+
+    // GET c
+    const { selectedCategory,  maxDistanceKm} = useContext(HostelContext);
+
+
 
     const fetchedListings = useRef(false);
     const router = useRouter();
@@ -32,9 +42,9 @@ const ListingsMap = React.memo(
       queryFn: () =>
         LoadHostels(
           selectedCategory ?? "",
-          1,
-          20,
-          selectedMaxDistanceKm,
+          PAGE,
+          LIMIT,
+          maxDistanceKm,
           region?.latitude,
           region?.longitude
         ),
@@ -42,9 +52,12 @@ const ListingsMap = React.memo(
       staleTime: 1000 * 60 * 5, // Allow cached data for 5 minutes to avoid excessive fetches
     });
 
-    // Update listings efficiently using useMemo for stable reference
+
+
+
+    // Update allHostels efficiently using useMemo for stable reference
     const allHostels = useMemo(() => {
-      if (!data?.hostels) return []; // Handle case where data is not yet fetched
+      if (!data?.hostels) return []; 
 
       // after change location refrech listings of hostels cards
       queryClient.invalidateQueries({ queryKey: ["hostels"] });
@@ -84,6 +97,9 @@ const ListingsMap = React.memo(
       requestLocationPermissions();
     }, []);
 
+
+
+    // when user change location by scroling map
     const onRegionChangeComplete = useCallback((newLocation: any) => {
       setRegion({
         latitude: newLocation.latitude,
@@ -93,6 +109,9 @@ const ListingsMap = React.memo(
       });
     }, []);
 
+
+
+    // rander Markers
     const renderCluster = (cluster: {
       onPress?: any;
       id?: any;
@@ -121,17 +140,21 @@ const ListingsMap = React.memo(
       );
     };
 
+
+
+
     return (
       <View style={styles.container}>
         {region && (
           <>
             {isLoading && (
               <ActivityIndicator
-                size="large"
-                color={COLORS.primary}
-                style={styles.loadingNewLocation}
+              size="large"
+              color={COLORS.primary}
+              style={styles.loadingNewLocation}
               />
             )}
+           
             <MapView
               animationEnabled={false}
               style={StyleSheet.absoluteFill}
@@ -139,6 +162,7 @@ const ListingsMap = React.memo(
               showsUserLocation={true}
               showsMyLocationButton={true}
               initialRegion={region}
+            
               clusterColor="#fff"
               clusterTextColor="#000"
               clusterFontFamily="mon-sb"

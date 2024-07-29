@@ -20,9 +20,7 @@ const Page = () => {
         options={{
           header: () => (
             <ExploreHeader
-              onSelectCategory={setSelectedCategory}
-              onMaxDistanceKm={setMaxDistanceKm}
-              selectedMaxDistanceKm={maxDistanceKm}
+             
             />
           ),
         }}
@@ -30,9 +28,9 @@ const Page = () => {
       
       <View style={styles.container}>
         <ListingsMap 
-          selectedMaxDistanceKm={maxDistanceKm}
-        selectedCategory={selectedCategory} />
-        <ListingsBottomSheet selectedCategory={selectedCategory} />
+   
+        />
+        <ListingsBottomSheet  />
       </View>
     </GestureHandlerRootView>
   );

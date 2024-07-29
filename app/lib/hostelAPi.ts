@@ -56,8 +56,7 @@ export const CreateReservation = async ({
 export const LoadHostels = async (selectedCategory: string, page: number = 1, limit: number = 10,maxDistanceKm = 2000,latitude :number =  32.307269,longitude:number = -9.846902) => {
 
 
-  // const latitude = 32.307269; // User's latitude
-  // const longitude = -9.846902; // User's longitude
+
   
 
   try {
@@ -80,6 +79,43 @@ export const LoadHostels = async (selectedCategory: string, page: number = 1, li
 
 
 
+    return res;
+  } catch (error: any) {
+    // if the timeout is reached
+    if (error.name === "AbortError") {
+      throw new Error("Timout error");
+    }
+    // Handle network or fetch errors
+    console.error("Login Error:", error);
+    throw new Error("Unspected Error ");
+  }
+};
+
+
+
+export const LoadOneHostels = async (id: string) => {
+
+
+
+  
+
+  try {
+    const response = await fetchWithTimeout(
+      `${URL}/${id}`,
+      {
+        timeout: 8000, // Adjust the timeout value as needed
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        
+        },
+      }
+    );
+    const res = await response.json();
+
+    if (res.error) {
+      throw res.message;
+    }
 
 
 

@@ -1,5 +1,5 @@
 import { View, Text, ActivityIndicator, StyleSheet, Image } from 'react-native';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { COLORS } from '@/constants/theme';
@@ -7,6 +7,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { LoadHostels } from '@/app/lib/hostelAPi';
 import HostCard from './hostCard';
 import { HostType } from '@/constants/types';
+import { HostelContext } from '@/app/context/hostelContext';
 
 interface HostelsResponse {
   hostels: HostType[];
@@ -15,12 +16,13 @@ interface HostelsResponse {
   pages: number;
 }
 
-const Listings = ({ selectedCategory }: { selectedCategory: null | string }) => {
+const Listings = () => {
   const { t } = useTranslation();
   const LIMIT = 4;
 
+  const { selectedCategory, setSelectedCategory, maxDistanceKm, setMaxDistanceKm } = useContext(HostelContext);
 
-
+// console.log(selectedCategory)
   //  infinit scrolling for hostels
   const {
     data,

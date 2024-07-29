@@ -25,7 +25,7 @@ export interface CategoriesType {
     address: string;
     latitude: number; 
     longitude: number; 
-    price: number; 
+    price: number;
     category: string;
     amenities: string[]; 
     userId: string; 

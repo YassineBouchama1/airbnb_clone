@@ -9,6 +9,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import i18n from '../services/i18n';
 import { useTranslation } from 'react-i18next';
 import AuthProvider from './AuthContext';
+import { HostelProvider } from './context/hostelContext';
 
 export {
   ErrorBoundary,
@@ -55,6 +56,8 @@ function RootLayoutNav() {
   const router = useRouter();
 
   return (
+    <HostelProvider>
+
     <QueryClientProvider client={queryClient}>
 
     <AuthProvider>
@@ -103,10 +106,18 @@ function RootLayoutNav() {
             ),
           }}
           />
+          <Stack.Screen
+        name="(modals)/filter"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: 'modal',
+        }}
+      />
       </Stack>
   
   </AuthProvider>
   </QueryClientProvider>
+          </HostelProvider>
 
   );
 }

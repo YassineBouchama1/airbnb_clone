@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {COLORS} from '@/constants/theme';
 import React from 'react';
 
-const ListingsBottomSheet = ({ selectedCategory }: {selectedCategory:null | string}) => {
+const ListingsBottomSheet = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['4%', '100%'], []);
 
@@ -23,10 +23,8 @@ const ListingsBottomSheet = ({ selectedCategory }: {selectedCategory:null | stri
         handleIndicatorStyle={{ backgroundColor: COLORS.grey , width: 50, }}
         style={styles.sheetContainer}
     >
-        <Listings selectedCategory={selectedCategory} />
-        {/* <BottomSheetScrollView Style={styles.contentContainer}>
-          <Listings selectedCategory={selectedCategory} />
-        </BottomSheetScrollView> */}
+        <Listings  />
+    
         <View style={styles.absoluteBtn}>
           <TouchableOpacity onPress={onShowMap} style={styles.btn}>
             <Text style={{ fontFamily: 'mon-sb', color: '#fff' }}>Map</Text>

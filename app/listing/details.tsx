@@ -20,13 +20,14 @@ import Carousel from "pinar";
 import hostJson from "@/constants/hosts.json";
 import { HostType } from "@/constants/types";
 import { COLORS } from "@/constants/theme";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateReservation } from "../lib/reservationApi";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import HostCarousel from "@/components/HostDetails/HostCarousel";
 import HostInfo from "@/components/HostDetails/HostInfo";
 import HostAmenities from "@/components/HostDetails/HostAmenities";
+import { LoadOneHostels } from "../lib/hostelAPi";
 
 // the type for the reservation data
 interface ReservationData {
@@ -39,7 +40,6 @@ const Page = () => {
   const params = useLocalSearchParams();
   const Host_code = String(params.Host_code || "");
 
-  const [host, setHost] = useState<HostType>();
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const [totalDays, setTotalDays] = useState(1);
@@ -48,20 +48,23 @@ const Page = () => {
 
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    // Fetch detail information host
-    const fetchHostDetails = async () => {
-      const selectedHost = hostJson.find(
-        (host) => host.Host_code === Host_code
-      );
-      setHost(selectedHost);
-    };
 
-    if (Host_code) {
-      fetchHostDetails();
-    }
-  }, [Host_code, i18n.language]);
 
+
+   // Fetch hostels using Tanstack Query with dependency on region for smooth updates
+   const { data , isLoading,isError } = useQuery({
+    queryKey: ["hostelDetails", Host_code,i18n.language], 
+    queryFn: () =>
+      LoadOneHostels(
+        Host_code,
+      
+      ),
+    enabled: !!Host_code, // Only fetch when region is available
+    staleTime: 1000 * 60 * 5, // Allow cached data for 5 minutes to avoid excessive fetches
+  });
+
+
+ 
   // Mutation to add a new reservation
   const mutation = useMutation({
     mutationFn: async (data: ReservationData) => await CreateReservation(data),
@@ -89,7 +92,7 @@ const Page = () => {
   };
 
   // While data is fetching, display loader
-  if (!host) {
+  if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -97,12 +100,24 @@ const Page = () => {
     );
   }
 
+
+  // While data is fetching, display loader
+  if (isError) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Error </Text>
+      </View>
+    );
+  }
+
+
   return (
     <ScrollView style={styles.container}>
-      <HostCarousel host={host} />
+   
+      <HostCarousel host={data} />
       <View style={styles.contentContainer}>
-        <HostInfo host={host} />
-        <HostAmenities host={host} />
+        <HostInfo host={data} />
+        <HostAmenities host={data} />
 
         <View style={styles.container}>
           <DateTimePicker
@@ -117,7 +132,7 @@ const Page = () => {
                 dayjs(dates.startDate),
                 "days"
               );
-
+              
               // Update the price based on the total number of days selected
               setTotalDays(totalDays);
             }}
@@ -129,7 +144,7 @@ const Page = () => {
 
         <View style={styles.buttonContainer}>
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.price}>${host.price * totalDays}</Text>
+            <Text style={styles.price}>${data?.price * totalDays}</Text>
             <Text style={{ margin: 4 }}>night</Text>
           </View>
           <TouchableOpacity
@@ -139,14 +154,16 @@ const Page = () => {
               ...styles.addButton,
               opacity: mutation.isPending ? 0.4 : 1,
             }}
-          >
+            >
             <Text style={styles.addButtonText}>
               {mutation.isPending ? "Booking" : t("Book")}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
+     
     </ScrollView>
+   
   );
 };
 

@@ -24,7 +24,7 @@ const HostInfo = ({host}:{host:HostType}) => {
   return (
     
     <>
-     <Text style={styles.title}>{host.nom}</Text>
+     <Text style={styles.title}>{host.name}</Text>
           <View
           style={{
             flexDirection: "row",
@@ -35,25 +35,25 @@ const HostInfo = ({host}:{host:HostType}) => {
         >
           <Ionicons name="location-outline" size={20} color={"#000"} />
           <Text style={styles.address}>
-            {host.address.address},{host.address.city},{host.address.country}
+            {host.address}
           </Text>
         </View>
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
             <Ionicons name="person-outline" size={20} />
-            <Text style={styles.infoText}> {host.guests}</Text>
+            <Text style={styles.infoText}> 5</Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="star-outline" size={20} />
-            <Text style={styles.infoText}>{host.Rating}</Text>
+            <Text style={styles.infoText}>5</Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="bed-outline" size={20} />
-            <Text style={styles.infoText}> {host.bedrooms}</Text>
+            <Text style={styles.infoText}> {host.beds}</Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="water-outline" size={20} />
-            <Text style={styles.infoText}> {host.baths}</Text>
+            <Text style={styles.infoText}> {host.beds}</Text>
           </View>
         </View>
     </>

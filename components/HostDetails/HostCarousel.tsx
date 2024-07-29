@@ -37,20 +37,20 @@ const router  = useRouter()
   
 // share btn 
 const shareListing = async () => {
-  if (!host || !host.Host_code) {
+  if (!host || !host._id) {
     console.error("Host data or Host code is not available.");
     alert("Host data or Host code is not available.");
     return;
   }
 
   try {
-    const imageUrl = host.image[0].secure_url;
-    const imageUri = `${FileSystem.cacheDirectory}${host.Host_code}.jpg`;
+    const imageUrl = host.images[0];
+    const imageUri = `${FileSystem.cacheDirectory}${host._id}.jpg`;
 
     await FileSystem.downloadAsync(imageUrl, imageUri);
 
     await Share.share({
-      message: `Check out this wonderful Host: ${host.nom}\n\nLink: https://main.d11i2xf9qyhgyw.amplifyapp.com/host/${host.Host_code}`,
+      message: `Check out this wonderful Host: ${host.name}\n\nLink: https://main.d11i2xf9qyhgyw.amplifyapp.com/host/${host._id}`,
       url: imageUri,
     });
 
@@ -71,16 +71,16 @@ const shareListing = async () => {
         dotStyle={styles.dotStyle}
         activeDotStyle={[styles.dotStyle, { backgroundColor: "white" }]}
         >
-        {host.image.map((img:any) => (
+        {host.images.map((img:string) => (
   
           <ExpoImage
          
           style={styles.images}
-          source={{ uri: img?.secure_url  }}
+          source={{ uri: img  }}
           placeholder={{ blurhash }}
           contentFit="cover"
           transition={1000}
-          key={host.Host_code}
+          key={host._id}
         />
         ))}
       </Carousel>
