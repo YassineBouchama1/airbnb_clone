@@ -41,7 +41,7 @@ const Listings = ({ selectedCategory }: { selectedCategory: null | string }) => 
     initialPageParam: 1
   });
 
-
+console.log(data)
 
   const allHostels = useMemo(() => 
     data?.pages.flatMap((page, pageIndex) => 

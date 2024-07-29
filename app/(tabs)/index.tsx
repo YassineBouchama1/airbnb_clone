@@ -11,7 +11,7 @@ import i18n from '../../services/i18n'
 
 const Page = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [maxDistanceKm, setMaxDistanceKm] = useState<number>(20);
+  const [maxDistanceKm, setMaxDistanceKm] = useState<number>(5);
 
   
   return (
@@ -29,7 +29,9 @@ const Page = () => {
       />
       
       <View style={styles.container}>
-        <ListingsMap selectedCategory={selectedCategory} />
+        <ListingsMap 
+          selectedMaxDistanceKm={maxDistanceKm}
+        selectedCategory={selectedCategory} />
         <ListingsBottomSheet selectedCategory={selectedCategory} />
       </View>
     </GestureHandlerRootView>

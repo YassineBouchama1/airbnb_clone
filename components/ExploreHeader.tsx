@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, SafeAreaView, StyleSheet, TouchableOpacity, Text, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, SafeAreaView, StyleSheet, TouchableOpacity, Text, ScrollView, ActivityIndicator, Image, StatusBar } from 'react-native';
 import { Link } from 'expo-router';
 import { COLORS } from '@/constants/theme';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import categoriesJson from '@/constants/categories.json';
 import { CategoryType } from '@/constants/types';
-
+import { StatusBar as ExpoStatusBar } from 'expo-status-bar'; // Import StatusBar from expo-status-bar
+import Slider from '@react-native-community/slider';
+const CONSTANTS = {
+  MAX_VALUE: 100,
+  MIN_VALUE: 10,
+  STEP: 10,
+  DEFAULT_STEP_RESOLUTION: 100,
+} as const;
 
 
 const ExploreHeader = ({ onSelectCategory, onMaxDistanceKm, selectedMaxDistanceKm }: any) => {
@@ -32,7 +39,8 @@ const ExploreHeader = ({ onSelectCategory, onMaxDistanceKm, selectedMaxDistanceK
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: '#fff', paddingTop: 35 }}>
+    <SafeAreaView style={{ backgroundColor: '#fff', paddingTop: 50 }}>
+      <ExpoStatusBar style="auto" />
       <View style={styles.container}>
         <View style={[styles.actionRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <Link href={'/(modals)/booking'} asChild>
@@ -80,6 +88,19 @@ const ExploreHeader = ({ onSelectCategory, onMaxDistanceKm, selectedMaxDistanceK
           )}
         </ScrollView>
         
+        <View style={{alignItems: 'center'}}>
+      <Text style={styles.text}>{selectedMaxDistanceKm && +selectedMaxDistanceKm.toFixed(3)}</Text>
+      <Slider
+    
+        style={[styles.slider, ]}
+        step={CONSTANTS.STEP}
+     
+        minimumValue={CONSTANTS.MIN_VALUE}
+        maximumValue={CONSTANTS.MAX_VALUE}
+        value={selectedMaxDistanceKm}
+        onValueChange={onMaxDistanceKm}
+      />
+    </View>
         <View style={styles.distanceContainer}>
           <Text style={styles.distanceLabel}>KM:</Text>
           
@@ -94,6 +115,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     height: 180,
+
   },
   actionRow: {
     alignItems: 'center',
@@ -106,6 +128,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.grey,
     borderRadius: 24,
+  },
+  text: {
+    fontSize: 14,
+    textAlign: 'center',
+    fontWeight: '500',
+    margin: 0,
+  },
+  divider: {
+    width: 2,
+    height: 20,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  slider: {
+    width: 300,
+    opacity: 1,
+    marginTop: 10,
   },
   searchBtn: {
     backgroundColor: '#fff',
