@@ -11,6 +11,7 @@ import i18n from '../../services/i18n'
 
 const Page = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [maxDistanceKm, setMaxDistanceKm] = useState<number>(20);
 
   
   return (
@@ -20,7 +21,8 @@ const Page = () => {
           header: () => (
             <ExploreHeader
               onSelectCategory={setSelectedCategory}
-              selectedCategory={selectedCategory}
+              onMaxDistanceKm={setMaxDistanceKm}
+              selectedMaxDistanceKm={maxDistanceKm}
             />
           ),
         }}

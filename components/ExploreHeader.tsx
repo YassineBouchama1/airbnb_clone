@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Text, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { Link } from 'expo-router';
-import {COLORS} from '@/constants/theme';
+import { COLORS } from '@/constants/theme';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { CategoriesType, CategoryType } from '@/constants/types';
-import categoriesJson from '@/constants/categories.json'
+import categoriesJson from '@/constants/categories.json';
+import { CategoryType } from '@/constants/types';
 
 
 
-const ExploreHeader = ({ onSelectCategory }:any) => {
+const ExploreHeader = ({ onSelectCategory, onMaxDistanceKm, selectedMaxDistanceKm }: any) => {
   const [categories, setCategories] = useState<CategoryType[] | any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -18,22 +17,24 @@ const ExploreHeader = ({ onSelectCategory }:any) => {
   const isRTL = i18n.language === 'ar';
 
   useEffect(() => {
-    
-    // fetch list of categories
-        setCategories([{ category_code: 'all', name: t('All') }, ...categoriesJson]);
-        setLoading(false);
-      
+    // Fetch list of categories
+    setCategories([{ category_code: 'all', name: t('All') }, ...categoriesJson]);
+    setLoading(false);
   }, [i18n.language]);
 
-  const handleCategorySelect = (categoryCode:string) => {
+  const handleCategorySelect = (categoryCode: string) => {
     setSelectedCategory(categoryCode);
     onSelectCategory(categoryCode);
   };
-  
+
+  const handleDistanceChange = (value: number) => {
+    onMaxDistanceKm(value);
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: '#fff', paddingTop: 35 }}>
       <View style={styles.container}>
-        <View style={[styles.actionRow, {flexDirection: isRTL ? 'row-reverse' : 'row'} ]}>
+        <View style={[styles.actionRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <Link href={'/(modals)/booking'} asChild>
             <TouchableOpacity style={styles.searchBtn}>
               <Ionicons name="search" size={24} />
@@ -48,15 +49,15 @@ const ExploreHeader = ({ onSelectCategory }:any) => {
           </TouchableOpacity>
         </View>
         
-        <ScrollView 
+        <ScrollView
           horizontal={true}
-          contentContainerStyle={{ alignItems: 'center', paddingHorizontal: 10 }} 
+          contentContainerStyle={{ alignItems: 'center', paddingHorizontal: 10 }}
           showsHorizontalScrollIndicator={false}
         >
           {loading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
           ) : (
-            categories.map((category:any) => (
+            categories.map((category: any) => (
               <View key={category.category_code} style={styles.categoryContainer}>
                 <TouchableOpacity
                   style={[styles.categoryBtn, selectedCategory === category.category_code && styles.selectedCategoryBtn]}
@@ -78,6 +79,12 @@ const ExploreHeader = ({ onSelectCategory }:any) => {
             ))
           )}
         </ScrollView>
+        
+        <View style={styles.distanceContainer}>
+          <Text style={styles.distanceLabel}>KM:</Text>
+          
+          <Text style={styles.distanceValue}>{selectedMaxDistanceKm} km</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -86,7 +93,7 @@ const ExploreHeader = ({ onSelectCategory }:any) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    height: 140,
+    height: 180,
   },
   actionRow: {
     alignItems: 'center',
@@ -114,7 +121,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 8,
     shadowOffset: { width: 1, height: 1 },
-    
   },
   categoryContainer: {
     justifyContent: 'center',
@@ -126,7 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     backgroundColor: COLORS.lightGrey,
-    
   },
   selectedCategoryBtn: {
     backgroundColor: COLORS.lightGrey,
@@ -150,6 +155,19 @@ const styles = StyleSheet.create({
   },
   selectedCategoryText: {
     color: COLORS.grey,
+  },
+  distanceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  distanceLabel: {
+    fontFamily: 'mon-sb',
+    marginRight: 10,
+  },
+  distanceValue: {
+    fontFamily: 'mon-sb',
+    marginLeft: 10,
   },
 });
 

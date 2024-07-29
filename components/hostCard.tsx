@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import * as FileSystem from "expo-file-system";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
@@ -40,7 +40,7 @@ const shareListing = async (item: HostType) => {
 
     await Share.share({
       title: `Check out this wonderful Host: ${item.name}`,
-      message: `Check out this wonderful Host: ${item.name}\n\nLink: https://main.d11i2xf9qyhgyw.amplifyapp.com/host/${item.Host_code}`,
+      message: `Check out this wonderful Host: ${item.name}\n\nLink: https://main.d11i2xf9qyhgyw.amplifyapp.com/host/${item._id}`,
       url: imageUri,
     });
 
@@ -52,13 +52,8 @@ const shareListing = async (item: HostType) => {
 };
 
 // render  Card Listing
-const HostCard = ({
-  item,
-  isFav = false,
-}: {
-  item: HostType;
-  isFav?: boolean;
-}) => {
+const HostCard = memo(({ item }: { item: HostType }) => {
+
   const { t, i18n } = useTranslation(); // Get the current language
 
   const router = useRouter();
@@ -135,8 +130,9 @@ const HostCard = ({
         </View>
       </TouchableOpacity> 
     </Animated.View>
-  );
-};
+  )
+});
+
 
 const styles = StyleSheet.create({
   card: {

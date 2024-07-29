@@ -11,10 +11,11 @@ import { useQuery } from '@tanstack/react-query';
 import { LoadHostels } from '@/app/lib/hostelAPi';
 import { COLORS } from '@/constants/theme';
 
-const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | null}) => {
+const ListingsMapDynamic = React.memo(({ selectedCategory }:{selectedCategory:string | null}) => {
   const [region, setRegion] = useState<any>(null);
-  const [loadingLocation, setLoadingLocation] = useState<boolean>(true);
-
+  const [listings, setListings] = useState<HostType[]>([]);
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
   const fetchedListings = useRef(false);
   const router = useRouter();
 
@@ -32,7 +33,7 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
     if (!data?.hostels) return []; // Handle case where data is not yet fetched
 
     // Combine existing listings with newly fetched ones
-    const combinedListings = fetchedListings.current ? [...data.hostels] : data.hostels;
+    const combinedListings = fetchedListings.current ? [...listings, ...data.hostels] : data.hostels;
     fetchedListings.current = true; // Set flag to prevent duplicate fetches on subsequent renders
     return combinedListings;
   }, [data]);
@@ -45,7 +46,7 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
           Alert.alert('Permission to access   location was denied');
-          setLoadingLocation(false);
+          setLoading(false);
           return;
         }
 
@@ -60,7 +61,7 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
       } catch (error:any)   
  {
         Alert.alert('Error accessing location:', error.message);
-        setLoadingLocation(false);
+        setLoading(false);
       }
     };
 
@@ -108,7 +109,7 @@ const ListingsMap = React.memo(({ selectedCategory }:{selectedCategory:string | 
     <View style={styles.container}>
       {region && (
         <>
-        {isLoading && (<ActivityIndicator size="large" color={COLORS.primary}  style={styles.loadingNewLocation}/>)}
+        {isLoading && (<ActivityIndicator size="large" color={COLORS.primary}  style={{zIndex:99 , flex:1}}/>)}
         <MapView
           animationEnabled={false}
           style={StyleSheet.absoluteFill}
@@ -172,16 +173,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'mon-sb',
   },
-  loadingNewLocation:{zIndex:99 ,paddingTop:20,backgroundColor:'white', borderRadius:10
-
-    ,
-    position:'absolute',
-    top:1,
-  
-    left:'30%',
-    right:'30%',
-  
-  }
 });
 
-export default ListingsMap;
+export default ListingsMapDynamic;

@@ -53,11 +53,16 @@ export const CreateReservation = async ({
   }
 };
 
-export const LoadHostels = async (selectedCategory: string, page: number = 1, limit: number = 10) => {
+export const LoadHostels = async (selectedCategory: string, page: number = 1, limit: number = 10,maxDistanceKm = 2000,latitude :number =  32.307269,longitude:number = -9.846902) => {
+
+
+  // const latitude = 32.307269; // User's latitude
+  // const longitude = -9.846902; // User's longitude
+  
 
   try {
     const response = await fetchWithTimeout(
-      `${URL}?cat=${selectedCategory}&page=${page}&limit=${limit}`,
+      `${URL}?cat=${selectedCategory}&page=${page}&limit=${limit}&latitude=${latitude}&longitude=${longitude}&maxDistanceKm=${maxDistanceKm}`,
       {
         timeout: 8000, // Adjust the timeout value as needed
         method: "GET",
@@ -72,6 +77,11 @@ export const LoadHostels = async (selectedCategory: string, page: number = 1, li
     if (res.error) {
       throw res.message;
     }
+
+
+
+
+
 
     return res;
   } catch (error: any) {
