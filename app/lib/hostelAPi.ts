@@ -53,11 +53,11 @@ export const CreateReservation = async ({
   }
 };
 
-export const LoadHostels = async (selectedCategory:string) => {
+export const LoadHostels = async (selectedCategory: string, page: number = 1, limit: number = 10) => {
 
   try {
     const response = await fetchWithTimeout(
-      URL+'?cat='+selectedCategory,
+      `${URL}?cat=${selectedCategory}&page=${page}&limit=${limit}`,
       {
         timeout: 8000, // Adjust the timeout value as needed
         method: "GET",

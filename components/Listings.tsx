@@ -18,38 +18,26 @@ import HostCard from './hostCard';
 
 
 
-
 const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
-
+  
   const { t, i18n } = useTranslation(); // Get the current language
+  const LIMIT = 10;
 
 
 
 
 
-  // GetHostes
+  // Get Hostes
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['reservations', selectedCategory],
+    queryKey: ['reservations', selectedCategory],    // when selected category changed we reload the hostels from api by new selected category
     queryFn: () => LoadHostels(selectedCategory ?? ''),
   
   });
 
 
 
-  // when selected category changed we reload the hostels from api by new selected category
-  useEffect(() => {
-    if (selectedCategory) {
-      refetch();
-    }
-  }, [selectedCategory, refetch]);
 
-
-
-
-  function onEndReached (){
-
-    console.log("onEndReached")
-  }
+ 
 
   return (
     <View style={{ flex: 1 }}>
@@ -67,7 +55,7 @@ const Listings = ({ selectedCategory }:{selectedCategory:null | string}) => {
             ListHeaderComponent={data.length > 0 ? (
               <Text style={styles.hostsSum}>{data?.length} homes</Text>
             ) : null}
-            onEndReached={onEndReached}
+       
           />
         ) : (
           <View style={styles.noListingsContainer}>
