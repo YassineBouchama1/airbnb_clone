@@ -38,7 +38,7 @@ const ListingsMap = React.memo(
 
     // Fetch hostels using Tanstack Query with dependency on region for smooth updates
     const { data, isLoading } = useQuery({
-      queryKey: ["hostelsMap", selectedCategory, region], 
+      queryKey: ["hostelsMap", selectedCategory, region,maxDistanceKm], 
       queryFn: () =>
         LoadHostels(
           selectedCategory ?? "",

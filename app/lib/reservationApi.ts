@@ -9,9 +9,12 @@ interface ReservationData {
   endDate: dayjs.Dayjs | string;
 }
 
-const URL = 'http://192.168.0.170:3000/reservation';
 
+const URL = process.env.EXPO_PUBLIC_BACKEND_URL+'/reservation' ;
 
+if (!URL) {
+  throw new Error("EXPO_PUBLIC_BACKEND_URL is not defined");
+}
 export const CreateReservation = async ({
   Host_code,
   startDate,

@@ -3,9 +3,10 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-na
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { useAuth } from '../AuthContext'; // Adjust the import path as per your project structure
+import { useAuth } from '../context/AuthContext'; // Adjust the import path as per your project structure
 import { logout } from '../AuthService'; // Adjust the import path as per your project structure
 import { useRouter } from 'expo-router';
+import LoginFormBottomSheet from '@/components/auth/LoginFormBottomSheet';
 
 const Profile = () => {
   const { isAuthenticated , userInfo, checkAuthStatus }:any = useAuth();
@@ -18,7 +19,7 @@ const router =  useRouter()
     
     // Update user info when component mounts or auth status changes
     checkAuthStatus();
-  }, []);
+  }, [isAuthenticated]);
 
 
 
@@ -74,6 +75,8 @@ const router =  useRouter()
         </>
       ) : (
         <>
+          <LoginFormBottomSheet/>
+
           <View style={styles.section}>
             <TouchableOpacity onPress={() => setIsLanguageSwitcherVisible(!isLanguageSwitcherVisible)} style={styles.row}>
               <View style={[styles.rowIcon, { backgroundColor: '#fe9400' }]}>
@@ -86,29 +89,12 @@ const router =  useRouter()
             {isLanguageSwitcherVisible && <LanguageSwitcher />}
           </View>
 
-          <View style={styles.section}>
-            <TouchableOpacity onPress={() => router.push('(modals)/login')} style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#00ccff' }]}>
-                <FeatherIcon color="#fff" name="log-in" size={20} />
-              </View>
-              <Text style={styles.rowLabel}>Login</Text>
-              <View style={styles.rowSpacer} />
-              <FeatherIcon color="#C6C6C6" name="chevron-right" size={20} />
-            </TouchableOpacity>
-          </View>
+     
 
-          <View style={styles.section}>
-            <TouchableOpacity onPress={() => router.push('(modals)/register')} style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#00cc66' }]}>
-                <FeatherIcon color="#fff" name="user-plus" size={20} />
-              </View>
-              <Text style={styles.rowLabel}>Register</Text>
-              <View style={styles.rowSpacer} />
-              <FeatherIcon color="#C6C6C6" name="chevron-right" size={20} />
-            </TouchableOpacity>
-          </View>
+   
         </>
       )} 
+    
     </View>
   );
 };

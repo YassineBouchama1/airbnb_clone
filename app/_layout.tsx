@@ -8,7 +8,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 import i18n from '../services/i18n';
 import { useTranslation } from 'react-i18next';
-import AuthProvider from './AuthContext';
+import AuthProvider from './context/AuthContext';
 import { HostelProvider } from './context/hostelContext';
 
 export {
@@ -58,40 +58,12 @@ function RootLayoutNav() {
   return (
     <HostelProvider>
 
+
     <QueryClientProvider client={queryClient}>
 
     <AuthProvider>
       <Stack>
 
-        {/* // if user dosnt login display this */}
-        <Stack.Screen
-          name="(modals)/login"
-          options={{
-            presentation: 'modal',
-            title: t('Log in or sign up'),
-            headerTitleStyle: {
-              fontFamily: 'mon-sb',
-            },
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.replace('/profile')}>
-                <Ionicons name="close-outline" size={28} />
-              </TouchableOpacity>
-            ),
-          }}
-          />
-        <Stack.Screen
-          name="(modals)/register"  
-          options={{
-            headerTitle: 'Create New Account', 
-            // headerShown: false ,
-            presentation: 'modal',
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.replace("/profile")}>
-                <Ionicons name="close-outline" size={28} />
-              </TouchableOpacity>
-            ),
-          }}
-          />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="listing/details" options={{ headerTitle: '', headerShown: false }} />
         <Stack.Screen

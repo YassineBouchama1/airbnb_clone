@@ -10,29 +10,22 @@ import i18n from '../../services/i18n'
 
 
 const Page = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [maxDistanceKm, setMaxDistanceKm] = useState<number>(5);
 
-  
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <>
       <Stack.Screen
         options={{
           header: () => (
-            <ExploreHeader
-             
-            />
+            <ExploreHeader />
           ),
         }}
       />
-      
       <View style={styles.container}>
-        <ListingsMap 
-   
-        />
+        <ListingsMap  />
         <ListingsBottomSheet  />
       </View>
-    </GestureHandlerRootView>
+
+          </>
   );
 };
 

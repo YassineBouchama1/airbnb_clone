@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import categoriesJson from '@/constants/categories.json';
 import { CategoryType } from '@/constants/types';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar'; // Import StatusBar from expo-status-bar
-import Slider from '@react-native-community/slider';
 import { HostelContext } from '@/app/context/hostelContext';
 import SliderDistanceKm from './SliderDistanceKm';
 
@@ -33,9 +32,7 @@ const ExploreHeader = () => {
 
   };
 
-  const handleDistanceChange = (value: number) => {
-    setMaxDistanceKm(value);
-  };
+
 
   return (
     <SafeAreaView style={{ backgroundColor: '#fff', paddingTop: 50 }}>
@@ -87,6 +84,7 @@ const ExploreHeader = () => {
         </ScrollView>
         <SliderDistanceKm/>
         </View>
+       
     </SafeAreaView>
   );
 };

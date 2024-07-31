@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
@@ -30,6 +30,7 @@ const Listings = () => {
     hasNextPage,
     isFetchingNextPage,
     status,
+    refetch
   } = useInfiniteQuery<HostelsResponse, Error>({
     queryKey: ['hostels', selectedCategory],
     // pass parameters to Fun LoadHostels To Fetch Hostels
@@ -43,8 +44,10 @@ const Listings = () => {
     initialPageParam: 1
   });
 
-console.log(data)
 
+
+
+  // compaine
   const allHostels = useMemo(() => 
     data?.pages.flatMap((page, pageIndex) => 
       page.hostels.map(hostel => ({...hostel, uniqueKey: `${pageIndex}-${hostel._id}`}))
@@ -79,6 +82,9 @@ console.log(data)
     return (
       <View style={styles.noListingsContainer}>
         <Text style={styles.noListingsText}>{t('Error loading hostels')}</Text>
+        <TouchableOpacity onPress={ async()=>await refetch()}>
+          <Text style={styles.tryAgainText}>{t('Try again')}</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -124,6 +130,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#D0D0D0',
+  },
+  tryAgainText:{
+
+    marginTop: 10,
+    fontSize: 14,
+    color: COLORS.primary,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   noListingsImage: {
     width: 300,
