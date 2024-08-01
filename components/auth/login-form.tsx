@@ -62,7 +62,7 @@ const LoginForm = () => {
 
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Basic input validation
     const newErrors: { email?: string; password?: string } = {};
     if (!email) {
@@ -78,7 +78,7 @@ const LoginForm = () => {
  
 
 
-      handleLogin()
+    await  handleLogin()
       console.log("Login with email:", email, "password:", password);
     }
   };

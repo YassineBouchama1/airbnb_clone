@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { Stack } from 'expo-router';
 import ExploreHeader from '@/components/ExploreHeader';
 import ListingsMap from '@/components/ListingsMap';
-import ListingsBottomSheet from '@/components/ListingsBottomSheet';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { initReactI18next } from 'react-i18next';
+import ListingsBottomSheet from '@/components/HostelsListings/ListingsBottomSheet';
+
 import i18n from '../../services/i18n'
 
 

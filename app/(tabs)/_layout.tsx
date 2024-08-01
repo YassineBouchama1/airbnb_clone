@@ -36,9 +36,9 @@ const Layout = () => {
         }}
         />
       <Tabs.Screen
-        name="trips"
+        name="reservations"
         options={{
-          tabBarLabel: t('Trips'),
+          tabBarLabel: t('Reservations'),
           tabBarIcon: ({ color, size }) => <FontAwesome5 name="airbnb" color={color} size={size} />,
         }}
         />

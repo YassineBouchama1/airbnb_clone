@@ -15,7 +15,6 @@ import { LoadReservations } from "../lib/reservationApi";
 import { FlashList } from "@shopify/flash-list";
 import { COLORS, FONTS, SIZES } from "@/constants/theme";
 import TripCard from "@/components/TripCard";
-import NoInternetWarning from "@/hooks/useInternetConnection";
 
 const Page = () => {
   const { isAuthenticated } = useAuth();
@@ -32,7 +31,7 @@ const Page = () => {
     return (
       <View style={styles.notFoundContainer}>
         <Text style={styles.notFoundText}>Opps... !</Text>
-        <Text style={styles.notFoundText}>Not found the NFT</Text>
+        <Text style={styles.notFoundText}>Not found the Reservations</Text>
       </View>
     );
   };
@@ -50,8 +49,9 @@ const Page = () => {
       "Failed to fetch",
       error.message,
       [
-        { text: "ReLogin", onPress: () => router.replace("/login") },
+        { text: "ReLogin", onPress: () => router.replace("/profile") },
         { text: "Try Again", onPress: async () => await refetch() },
+        { text: "close"},
       ],
       { cancelable: false }
     );
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: SIZES.xLarge,
   },
   notFoundText: {
-    color: COLORS.white,
+    color: COLORS.black,
     // fontFamily: FONTS.bold,
     fontSize: SIZES.xLarge,
   },

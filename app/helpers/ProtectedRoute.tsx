@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "expo-router";
 //   pathname: string;
 // }
 
-const protectedRoutes = ['/trips']; 
+const protectedRoutes = ['/reservations']; 
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 

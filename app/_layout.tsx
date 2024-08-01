@@ -2,7 +2,7 @@ import React from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
+import {  TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
@@ -58,7 +58,6 @@ function RootLayoutNav() {
   return (
     <HostelProvider>
 
-
     <QueryClientProvider client={queryClient}>
 
     <AuthProvider>
@@ -87,10 +86,10 @@ function RootLayoutNav() {
       />
       </Stack>
   
+
   </AuthProvider>
   </QueryClientProvider>
           </HostelProvider>
-
   );
 }
 

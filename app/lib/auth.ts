@@ -26,6 +26,8 @@ const Login = async (email: string, password: string) => {
 
     const response = await result.json();
 
+console.log(response)
+
     if (response.access_token) {
       console.log("login done");
       // Save info in local storage

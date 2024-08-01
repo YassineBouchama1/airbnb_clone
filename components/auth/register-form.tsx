@@ -63,7 +63,7 @@ const RegisterForm = () => {
    setIsLoading(false);
 
    if (result) {
-     router.replace("/login");
+     router.replace("/profile");
      await checkAuthStatus();
   console.log("Registration successful");
    } else {
@@ -76,7 +76,7 @@ const RegisterForm = () => {
 
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Basic input validation
     const newErrors: { email?: string; password?: string,name?: string } = {};
     if (!email) {
@@ -96,8 +96,8 @@ const RegisterForm = () => {
  
 
 
-      handleSignUp()
-      console.log("Login with email:", email, "password:", password);
+  await    handleSignUp()
+      console.log("Register with email:", email, "password:", password);
     }
   };
 

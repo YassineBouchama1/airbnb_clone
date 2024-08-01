@@ -48,8 +48,8 @@ const ListingsMap = React.memo(
           region?.latitude,
           region?.longitude
         ),
-      enabled: !!region, // Only fetch when region is available
-      staleTime: 1000 * 60 * 5, // Allow cached data for 5 minutes to avoid excessive fetches
+      enabled: !!region,
+      staleTime: 1000 * 60 * 5, 
     });
 
 

@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useMemo, useRef } from 'react';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import Listings from '@/components/Listings';
+import Listings from '@/components/HostelsListings/Listings';
 import { Ionicons } from '@expo/vector-icons';
 import {COLORS} from '@/constants/theme';
 import React from 'react';

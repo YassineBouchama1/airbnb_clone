@@ -36,7 +36,7 @@ const ExploreHeader = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: '#fff', paddingTop: 50 }}>
-      <ExpoStatusBar style="auto" />
+      <ExpoStatusBar style="dark" />
       <View style={styles.container}>
         
         <View style={[styles.actionRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>

@@ -51,7 +51,7 @@ export const CreateReservation = async ({
       throw new Error("Timout error");
     }
     // Handle network or fetch errors
-    console.error("Login Error:", error);
+    console.error("Error:", error);
     throw new Error("Unspected Error ");
   }
 };
@@ -86,7 +86,45 @@ export const LoadReservations = async () => {
       throw new Error("Timout error");
     }
     // Handle network or fetch errors
-    console.error("Login Error:", error);
+    console.error("Error:", error);
+    throw new Error("Unspected Error ");
+  }
+};
+
+
+
+
+export const RemoveReservation = async (id:string) => {
+  const token = await AsyncStorage.getItem("access_token");
+  if (!token) {
+    throw new Error("No access token found");
+  }
+  try {
+    const response = await fetchWithTimeout(
+      URL+'/'+id,
+      {
+        timeout: 8000, // Adjust the timeout value as needed
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const res = await response.json();
+
+    if (res.error) {
+      throw res.message;
+    }
+
+    return res;
+  } catch (error: any) {
+    // if the timeout is reached
+    if (error.name === "AbortError") {
+      throw new Error("Timout error");
+    }
+    // Handle network or fetch errors
+    console.error("Error:", error);
     throw new Error("Unspected Error ");
   }
 };

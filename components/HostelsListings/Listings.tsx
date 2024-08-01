@@ -82,6 +82,7 @@ const Listings = () => {
     return (
       <View style={styles.noListingsContainer}>
         <Text style={styles.noListingsText}>{t('Error loading hostels')}</Text>
+        <Text style={styles.noListingsText}>The Server Need 50sec To Work For First Time </Text>
         <TouchableOpacity onPress={ async()=>await refetch()}>
           <Text style={styles.tryAgainText}>{t('Try again')}</Text>
         </TouchableOpacity>
@@ -132,7 +133,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#D0D0D0',
   },
   tryAgainText:{
-
     marginTop: 10,
     fontSize: 14,
     color: COLORS.primary,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   noListingsText: {
     fontSize: 16,
-    color: COLORS.grey,
+    color: COLORS.primary,
     textAlign: 'center',
   },
   hostsSum: {

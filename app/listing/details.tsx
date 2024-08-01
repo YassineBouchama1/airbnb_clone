@@ -74,7 +74,7 @@ const Page = () => {
       Alert.alert(
         "Reservation",
         "Successfully Booked",
-        [{ text: "OK", onPress: () => router.push("/trips") }],
+        [{ text: "OK", onPress: () => router.push("/reservations") }],
         { cancelable: false }
       );
     },
