@@ -3,6 +3,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableNativeFeedback,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -41,9 +42,13 @@ const onDeleteRservation =  useCallback(async()=>{
 
     console.log("Delete btn");
     // TODO: delete reservation
-    mutation.mutate(trip.item._id)
+ await   mutation.mutate(trip.item._id)
+
+ ToastAndroid.show('Deleted successfully!', ToastAndroid.SHORT);
   
 },[trip.item._id]) 
+
+
 
   return (
     <TouchableNativeFeedback >
