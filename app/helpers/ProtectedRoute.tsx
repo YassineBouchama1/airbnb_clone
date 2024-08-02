@@ -21,6 +21,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     // redirect to login page
     if (!isAuthenticated && protectedRoutes.includes(pathname)) {
       router.replace('/profile');
+      console.log('check if user is authenticated')
     }
   }, [isAuthenticated, router, protectedRoutes]);
 

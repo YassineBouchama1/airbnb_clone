@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, { useState, useRef, useMemo, useEffect, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -13,15 +13,17 @@ import BottomSheet, {
 import { COLORS } from "@/constants/theme";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
+import { ThemeContext } from "@/app/context/ThemeContext";
 
 
 const LoginFormBottomSheet = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["70%", "80%"], []);
-const [whichForm,setWhichForm] = useState(true)
-  const handleCloseSheet = () => {
-    bottomSheetRef.current?.collapse();
-  };
+  const snapPoints = useMemo(() => ["60%", "70%"], []); // size of bottom sheet
+  
+
+const {formAuth ,setFormAuth} = useContext(ThemeContext) // bring context 
+
+
 
   return (
     <BottomSheet
@@ -34,12 +36,12 @@ const [whichForm,setWhichForm] = useState(true)
       style={styles.sheetContainer}
     >
       <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-        {whichForm ?<LoginForm />:<RegisterForm/>}
+        {formAuth ?<LoginForm />:<RegisterForm/>}
         
         <TouchableOpacity
         style={{alignItems: "center"}}
-        onPress={() => setWhichForm(!whichForm)}>
-          <Text style={styles.switcherText}>{whichForm ? "Don't have an account? Sign up":"Already have an account? Sign in"}</Text>
+        onPress={() => setFormAuth(!formAuth)}>
+          <Text style={styles.switcherText}>{formAuth ? "Don't have an account? Sign up":"Already have an account? Sign in"}</Text>
         </TouchableOpacity>
       </BottomSheetScrollView>
     </BottomSheet>

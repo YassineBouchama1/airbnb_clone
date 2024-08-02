@@ -75,7 +75,7 @@ const Page = () => {
         "Reservation",
         "Successfully Booked",
         [{ text: "OK", onPress: () => router.push("/reservations") }],
-        { cancelable: false }
+        { cancelable: true }
       );
     },
     onError: (error) => {

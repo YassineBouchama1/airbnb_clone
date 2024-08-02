@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, { useState, useRef, useMemo, useEffect, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -15,8 +15,8 @@ import { COLORS } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/app/context/AuthContext";
 import AuthService from "@/app/lib/auth";
-import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 import { RadioButton } from "react-native-paper";
+import { ThemeContext } from "@/app/context/ThemeContext";
 
 
 
@@ -36,6 +36,7 @@ const RegisterForm = () => {
 
  const [role, setRole] = useState("user");
 
+ const {formAuth ,setFormAuth} = useContext(ThemeContext)
 
  const router = useRouter();
 
@@ -53,6 +54,7 @@ const RegisterForm = () => {
  const handleSignUp = async () => {
    setIsLoading(true);
 
+   
    const result = await AuthService.Registration({
      name,
      email,
@@ -60,14 +62,18 @@ const RegisterForm = () => {
      role,
    });
 
-   setIsLoading(false);
+  
 
+   // after registration is successful update auth status
    if (result) {
-     router.replace("/profile");
-     await checkAuthStatus();
+   await setFormAuth(true) //display login form
+   await checkAuthStatus();
+   setIsLoading(false);
+     router.replace("/profile",);
   console.log("Registration successful");
    } else {
      console.log("Registration failed");
+     setIsLoading(false);
    }
  };
 

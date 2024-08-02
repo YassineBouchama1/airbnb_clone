@@ -10,6 +10,7 @@ import i18n from '../services/i18n';
 import { useTranslation } from 'react-i18next';
 import AuthProvider from './context/AuthContext';
 import { HostelProvider } from './context/hostelContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 export {
   ErrorBoundary,
@@ -56,6 +57,8 @@ function RootLayoutNav() {
   const router = useRouter();
 
   return (
+    <ThemeProvider>
+
     <HostelProvider>
 
     <QueryClientProvider client={queryClient}>
@@ -83,13 +86,14 @@ function RootLayoutNav() {
           // Set the presentation mode to modal for our modal route.
           presentation: 'modal',
         }}
-      />
+        />
       </Stack>
   
 
   </AuthProvider>
   </QueryClientProvider>
           </HostelProvider>
+        </ThemeProvider>
   );
 }
 
