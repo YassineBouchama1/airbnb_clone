@@ -35,3 +35,11 @@ export interface CategoriesType {
     __v: number;
   }
   
+
+
+  export interface HostelsResponse {
+    hostels: HostType[];
+    total: number;
+    page: number;
+    pages: number;
+  }
